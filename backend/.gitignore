@@ -12,5 +12,16 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+coverage/
+.idea/
+.DS_Store
 
 .byebug_history
+
+# Ignore Configs
+.envrc
+.rvmrc
+config/database.yml
+config/initializers/a_env.rb
+storage
+dump.rdb
