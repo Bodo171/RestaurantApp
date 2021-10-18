@@ -1,8 +1,9 @@
 import { Menu } from "../model/Menu";
+import { User } from "../model/User";
 
 export default class Service{
-    static apiUri = '';
-    static dummy = true;
+    static apiUri = 'https://restaurant-bckend.herokuapp.com/';
+    static dummy = false;
 
     static getMenu = () => {
         return new Promise((
@@ -43,7 +44,7 @@ export default class Service{
         });
     }
 
-    static reserveTable = (data: {name:string, day:string, hour: string, persons: number, phone: string}) => {
+    static reserveTable = (data: {name: string, day: string, hour: string, persons: number, phone: string}) => {
         return new Promise((
             resolve: (result: null) => void,
             reject: (error: any) => void
@@ -58,6 +59,85 @@ export default class Service{
                     .then((success) => { resolve(null) })
                     .catch((error) => { reject(error) });
             }
+        });
+    }
+
+    static login = (data: {email: string, password: string}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            if (Service.dummy){
+                reject('Cannot login in dummy mode!');
+                return;
+            }
+            fetch(this.apiUri + 'users/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                //credentials: 'include',
+                body: JSON.stringify({user: data})
+            })
+            .then((response) => {
+                if (response.status === 200){
+                    let jwt = response.headers?.get('Authorization')?.replace('Bearer ', '');
+                    if (jwt !== undefined && jwt !== ''){
+                        response.json().then((json) => {
+                            let user:User = {
+                                id: Number(json.data.id) || 0,
+                                type: json.data.type || 'unknown',
+                                attributes: {
+                                    email: json.data.attributes.email || ''
+                                }
+                            };
+                            localStorage.setItem('jwt', jwt||'');
+                            localStorage.setItem('user', JSON.stringify(user));
+                            resolve(null);
+                        });
+                    }else{
+                        console.error('Authorization failed: missing or invalid jwt key!');
+                        reject('404: Authorization failed! Try again or contact the administrator!');
+                    }
+                } else if (response.status === 401){
+                    reject('Wrong credentials!');
+                } else {
+                    reject('Authentification failed: ' + response.status);
+                }
+            })
+            .catch((error: any) => reject(error));
+            
+        });
+    }
+
+    static logout = () => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            if (Service.dummy){
+                reject('Cannot logout in dummy mode!');
+                return;
+            }
+            fetch(this.apiUri + 'users/logout', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': '' + localStorage.getItem('jwt')
+                },
+            })
+            .then((response) => {
+                if (response.status === 200){
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user');
+                    resolve(null);
+                }else{
+                    reject(response.statusText);
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+
+            
         });
     }
 }
