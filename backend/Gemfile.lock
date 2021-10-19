@@ -63,6 +63,22 @@ GEM
     annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
+    aws-eventstream (1.2.0)
+    aws-partitions (1.516.0)
+    aws-sdk-core (3.121.2)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.239.0)
+      aws-sigv4 (~> 1.1)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.50.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.104.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
+    aws-sigv4 (1.4.0)
+      aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
     builder (3.2.4)
     byebug (11.1.3)
@@ -101,6 +117,7 @@ GEM
       activesupport (>= 5.0)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
+    jmespath (1.4.0)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
     jwt (2.3.0)
@@ -122,7 +139,6 @@ GEM
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (4.11.0)
     pg (1.2.3)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -217,6 +233,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+  aws-sdk-s3
   byebug
   cancancan
   devise (~> 4.7, = 4.7.3)
@@ -224,7 +241,6 @@ DEPENDENCIES
   factory_bot_rails
   jsonapi-serializer
   listen (>= 3.0.5, < 3.2)
-  pagy (~> 4.1)
   pg
   pry
   puma (~> 5.2, >= 5.2.2)

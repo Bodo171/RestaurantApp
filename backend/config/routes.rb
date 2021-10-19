@@ -9,4 +9,6 @@ Rails.application.routes.draw do
       sessions: 'users/sessions',
       registrations: 'users/registrations'
      }
+
+  resources :dishes, only: [ :index ] # To add more (ex: show, create, update, delete)
 end
