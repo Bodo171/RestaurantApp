@@ -1,10 +1,12 @@
 import React from "react";
 import Service from "../service/Service";
+import TextField from '@mui/material/TextField';
 
 
 type State = {
     fields: {
         day: string;
+        dayAndTime: Date;
         hour: string;
         name: string;
         phone: string;
@@ -21,6 +23,7 @@ export default class BookTable extends React.Component<{}, State>{
         this.state = {
             fields: {
                 day: '',
+                dayAndTime: new Date() || null,
                 hour: '',
                 name: '',
                 phone: '',
@@ -39,8 +42,9 @@ export default class BookTable extends React.Component<{}, State>{
         const value = event.target.value;
         let fields = this.state.fields;
 
-        if("day" === inputName) fields.day = String(value);
-        if("hour" === inputName) fields.hour = String(value);
+        //if("day" === inputName) fields.day = String(value);
+        //if("hour" === inputName) fields.hour = String(value);
+        if("dayAndTime" === inputName) fields.dayAndTime = value;
         if("name" === inputName) fields.name = String(value);
         if("phone" === inputName) fields.phone = String(value);
         if("persons" === inputName) fields.persons = Number(value);
@@ -64,7 +68,7 @@ export default class BookTable extends React.Component<{}, State>{
 
         let error = this.validateForm();
         this.setState({error: error, success: ''});
-        
+
         if (error === ''){
             this.setState({sending: true});
             Service.reserveTable(this.state.fields)
@@ -80,6 +84,7 @@ export default class BookTable extends React.Component<{}, State>{
 
 
     render(){
+        let date = new Date();
         return (
             <section id="book-table">
                 <div className="container">
@@ -91,69 +96,80 @@ export default class BookTable extends React.Component<{}, State>{
                         </div>
                         <div className="col-md-4 col-md-offset-2">
                             <div className="left-image">
-                                <img src="img/book_left_image.jpg" alt="" />
+                                <img src="img/book_left_image.jpg" alt=""/>
                             </div>
                         </div>
                         <div className="col-md-4">
                             <div className="right-info">
                                 <h4>Rezervare</h4>
-                                <span style={{ color: "red" }}>{this.state.error}</span>
-                                <span style={{ color: "green" }}>{this.state.success}</span>
+                                <span style={{color: "red"}}>{this.state.error}</span>
+                                <span style={{color: "green"}}>{this.state.success}</span>
+
                                 <div className="row">
                                     <form>
-                                        <div className="col-md-6">
-                                            <fieldset>
-                                                <select required name='day' onChange={this.setValue}>
-                                                    <option value="">Alege ziua</option>
-                                                    <option value="Monday">Luni</option>
-                                                    <option value="Tuesday">Marți</option>
-                                                    <option value="Wednesday">Miercuri</option>
-                                                    <option value="Thursday">Joi</option>
-                                                    <option value="Friday">Vineri</option>
-                                                    <option value="Saturday">Sâmbătă</option>
-                                                    <option value="Sunday">Duminică</option>
-                                                </select>
-                                            </fieldset>
+                                        <div className="form-group">
+
+
+                                                    <TextField
+                                                        variant="standard"
+                                                        InputProps={{
+                                                            disableUnderline: true,
+                                                        }}
+                                                        id="dateAndTime"
+                                                        type="datetime-local"
+                                                        name="dateAndTime"
+                                                        className={"form-control"}
+                                                        defaultValue={
+                                                            date.getFullYear() + "-" +
+                                                            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
+                                                            ("00" + date.getDate()).slice(-2) + "T" +
+
+                                                            ("00" + date.getHours()).slice(-2) + ":" +
+                                                            ("00" + date.getMinutes()).slice(-2)
+                                                        }
+                                                        required
+                                                        onChange={this.setValue}
+                                                    />
+
+
                                         </div>
-                                        <div className="col-md-6">
-                                            <fieldset>
-                                                <select required name='hour' onChange={this.setValue} >
-                                                    <option value="">Alege ora</option>
-                                                    <option value="10-00">10:00</option>
-                                                    <option value="12-00">12:00</option>
-                                                    <option value="14-00">14:00</option>
-                                                    <option value="16-00">16:00</option>
-                                                    <option value="18-00">18:00</option>
-                                                    <option value="20-00">20:00</option>
-                                                    <option value="22-00">22:00</option>
-                                                </select>
-                                            </fieldset>
+                                        <div className="form-group">
+
+
+                                                    <input name="name" type="name" className="form-control" id="name"
+                                                           placeholder="Numele tău" onChange={this.setValue} required/>
+
+
+
+
+                                                    <input name="phone" type="phone" className="form-control" id="phone"
+                                                           placeholder="Număr de telefon" onChange={this.setValue}
+                                                           required/>
+
+
                                         </div>
-                                        <div className="col-md-6">
-                                            <fieldset>
-                                                <input name="name" type="name" className="form-control" id="name" placeholder="Numele tău" onChange={this.setValue} required />
-                                            </fieldset> 
+                                        <div className="form-group">
+
+
+                                                    <select required className="person form-control" name='persons'
+                                                            onChange={this.setValue} >
+                                                        <option value="">Câte persoane?</option>
+                                                        <option value="1">1 Persoană</option>
+                                                        <option value="2">2 Persoane</option>
+                                                        <option value="3">3 Persoane</option>
+                                                        <option value="4">4 Persoane</option>
+                                                        <option value="5">5 Persoane</option>
+                                                        <option value="6">6 Persoane</option>
+                                                    </select>
+
+
                                         </div>
-                                        <div className="col-md-6">
-                                            <fieldset>
-                                                <input name="phone" type="phone" className="form-control" id="phone" placeholder="Număr de telefon" onChange={this.setValue} required />
-                                            </fieldset>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <fieldset>
-                                                <select required className="person" name='persons' onChange={this.setValue}>
-                                                    <option value="">Câte persoane?</option>
-                                                    <option value="1">1 Persoană</option>
-                                                    <option value="2">2 Persoane</option>
-                                                    <option value="3">3 Persoane</option>
-                                                    <option value="4">4 Persoane</option>
-                                                    <option value="5">5 Persoane</option>
-                                                    <option value="6">6 Persoane</option>
-                                                </select>
-                                            </fieldset>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <button disabled={this.state.sending} type="submit" id="form-submit" className="btn" onClick={this.onSubmit}>Rezervă masă</button>
+                                        <div className="form-group">
+
+                                                <button disabled={this.state.sending} type="submit" id="form-submit"
+                                                        className="btn form-control" onClick={this.onSubmit}>Rezervă masă
+                                                </button>
+
                                         </div>
                                     </form>
                                 </div>

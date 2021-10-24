@@ -21,9 +21,9 @@ export default class App extends React.Component {
               <div className="navbar-header">
                 <button type="button" id="nav-toggle" className="navbar-toggle" data-toggle="collapse" data-target="#main-nav">
                   <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
+                  <span className="icon-bar"/>
+                  <span className="icon-bar"/>
+                  <span className="icon-bar"/>
                 </button>
               </div>
               <div id="main-nav" className="collapse navbar-collapse">
@@ -31,7 +31,7 @@ export default class App extends React.Component {
                   <li><Link to="/">Acasă</Link></li>
                   <li><Link to="/menu">Meniu</Link></li>
                   <li><Link to="/contact">Contact</Link></li>
-                  {isLoggedIn && 
+                  {isLoggedIn &&
                   <li><Link to="/admin">Admin</Link></li>
                   }
                 </ul>
@@ -62,7 +62,7 @@ export default class App extends React.Component {
               <Loginpage/>
               </>
             }
-            
+
           </Route>
 
           <Route path="/menu">
@@ -74,14 +74,14 @@ export default class App extends React.Component {
             <HeaderBar title="Contact" body="Vrei să ne trimiți un feedback sau să ne contactezi pentru relații de business? Folosește chestionarul de mai jos pentru a lua legătura cu noi!" />
             <Contact/>
           </Route>
-  
+
           <Route path="/" exact={true}>
           <HeaderBar title="Specialități cu gust" body="Te așteptăm la cel mai bun loc unde îți poți răsfăța papilele gustative cu mâncăruri pe alese... și alte vrăjeli..." />
             <Mainpage/>
           </Route>
-  
+
           <Redirect to="/" />
-          
+
         </Switch>
 
           <footer>
@@ -107,7 +107,7 @@ export default class App extends React.Component {
         </footer>
       </Router>
 
-      
+
     );
   }
 }
