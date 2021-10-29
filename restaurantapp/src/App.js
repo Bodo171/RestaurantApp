@@ -16,7 +16,9 @@ export default class App extends React.Component {
       <Router>
         <div className="header">
           <div className="container">
-            <a href="/" className="navbar-brand scroll-top">Restaurant App</a>
+              <nav className="navbar">
+                  <Link to="/" className="navbar-brand">Restaurant App</Link>
+              </nav>
             <nav className="navbar navbar-inverse" role="navigation">
               <div className="navbar-header">
                 <button type="button" id="nav-toggle" className="navbar-toggle" data-toggle="collapse" data-target="#main-nav">
