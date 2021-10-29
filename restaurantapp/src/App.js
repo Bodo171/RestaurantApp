@@ -4,6 +4,7 @@ import Mainpage from './component/Mainpage';
 import Loginpage from './component/Loginpage';
 import React from 'react';
 import HeaderBar from './component/HeaderBar';
+import Footer from './component/Footer';
 import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
@@ -84,27 +85,7 @@ export default class App extends React.Component {
           
         </Switch>
 
-          <footer>
-            <div className="container">
-              <div className="row">
-                  <div className="col-md-4">
-                      <p>Copyright &copy; 2017 Victory Template</p>
-                  </div>
-                  <div className="col-md-4">
-                      <ul className="social-icons">
-                          <li><a href="/"><i className="fa fa-facebook"></i></a></li>
-                          <li><a href="/"><i className="fa fa-twitter"></i></a></li>
-                          <li><a href="/"><i className="fa fa-linkedin"></i></a></li>
-                          <li><a href="/"><i className="fa fa-rss"></i></a></li>
-                          <li><a href="/"><i className="fa fa-dribbble"></i></a></li>
-                      </ul>
-                  </div>
-                  <div className="col-md-4">
-                      <p>Designed by <em>templatemo</em></p>
-                  </div>
-              </div>
-          </div>
-        </footer>
+          <Footer/>
       </Router>
 
       
