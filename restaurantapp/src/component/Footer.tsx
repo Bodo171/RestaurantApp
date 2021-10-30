@@ -1,6 +1,14 @@
 import React from "react";
 
-export default class Footer extends React.Component {
+type Props = {
+
+};
+
+type State = {
+
+};
+
+export default class Footer extends React.Component<Props, State> {
     render(){
         return (
             <footer>
