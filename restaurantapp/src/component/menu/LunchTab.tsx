@@ -3,7 +3,7 @@ import FoodBox from "./FoodBox";
 
 
 export default function LunchTab(props: {items: Array<FoodItem>}){
-    const items = props.items.map(item => <FoodBox item={item} key={item.name}/>);
+    const items = props.items.map(item => <FoodBox item={item} key={item.id}/>);
 
     return (
         <section className="lunch-menu">
