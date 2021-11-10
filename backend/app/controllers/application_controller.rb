@@ -5,9 +5,9 @@ class ApplicationController < ActionController::API
   rescue_from Exception do |exception|
     case exception
     when CanCan::AccessDenied
-      render_response({errors: 'Unauthorized access'}, status: 401)
+      render_response({ errors: 'Unauthorized access' }, status: 401)
     else
-      render_response({errors: 'An error has occurred'}, status: 422)
+      render_response({ errors: exception }, status: 422)
     end
   end
 
