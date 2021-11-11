@@ -18,8 +18,15 @@ export default class ItemList extends React.Component<Props, State>{
     }
     render() {
         const itemList = this.props.items.map(item => <Item item={item} key={item.id}/>);
-        return <div className="adminItems">
-            {itemList}
-        </div>
+        return(
+            <table className="table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+                {itemList}
+            </table>
+    )
     }
 }

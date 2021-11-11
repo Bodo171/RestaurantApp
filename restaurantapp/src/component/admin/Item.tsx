@@ -15,11 +15,11 @@ export default class Item extends React.Component<Props, State>{
     }
     render() {
         const item = this.props.item;
-        return <div className="adminItem">
-            Name: {item.name} <br/>
-            Description: {item.description}  <br/>
-            Price {item.price} <br/>
-            </div>
+        return <tr>
+                <td>{item.name}</td>
+                <td>{item.description}</td>
+                <td>Price {item.price} </td>
+            </tr>
     }
 }
 

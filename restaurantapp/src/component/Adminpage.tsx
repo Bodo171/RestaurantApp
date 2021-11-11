@@ -72,8 +72,8 @@ export default class Adminpage extends React.Component<{},State>{
             <div style={{display: "flex", alignItems: "center", justifyContent: 'center'}}>
                 <div style={{marginTop: '10px', marginBottom: '10px'}}>
                     <DisplaySelect defaultValue={this.state.onDisplay} onChange={(display: string) => {this.onDisplayChange(display);}}/>
-                    <button disabled={this.state.sending} className="btn" onClick={this.onLogout}>Logout</button>
                     <ItemList items={this.getCurrentMenu()}/>
+                    <button disabled={this.state.sending} className="btn" onClick={this.onLogout}>Logout</button>
                 </div>
             </div>
         )
