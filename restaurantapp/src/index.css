@@ -11,3 +11,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'AlexBrush-Regular';
+  src: local('AlexBrush-Regular'), url(./fonts/AlexBrush-Regular.ttf) format('truetype')
+}
+
+@font-face {
+  font-family: 'Forum-Regular';
+  src: local('Forum-Regular'), url(./fonts/Forum-Regular.ttf) format('truetype')
+}
+
+.btnPrimary{
+  background-color: #f2745f;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 3px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.btnSecondary{
+  background-color: transparent;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 3px;
+  text-decoration: none;
+  border: 3px solid #f2745f;
+}
+
+.btnSecondary:hover{
+  background-color: #f2745f;
+}

@@ -79,7 +79,7 @@ export default class App extends React.Component {
           </Route>
   
           <Route path="/" exact={true}>
-          <HeaderBar title="Specialități cu gust" body="Te așteptăm la cel mai bun loc unde îți poți răsfăța papilele gustative cu mâncăruri pe alese... și alte vrăjeli..." />
+          {/* <HeaderBar title="Specialități cu gust" body="Te așteptăm la cel mai bun loc unde îți poți răsfăța papilele gustative cu mâncăruri pe alese... și alte vrăjeli..." /> */}
             <Mainpage/>
           </Route>
   
