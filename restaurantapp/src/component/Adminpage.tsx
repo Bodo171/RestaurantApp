@@ -5,6 +5,7 @@ import CreateOwlCarousels from "../scripts/owlcarousel";
 import {DishType, dishTypeFromString, emptyMenu} from "../util/util";
 import ItemList from "./admin/ItemList";
 import DisplaySelect from "./admin/DisplaySelect";
+import AddItem from "./admin/AddItem";
 
 type State = {
     menu: Menu;
@@ -73,6 +74,7 @@ export default class Adminpage extends React.Component<{},State>{
                 <div style={{marginTop: '10px', marginBottom: '10px'}}>
                     <DisplaySelect defaultValue={this.state.onDisplay} onChange={(display: string) => {this.onDisplayChange(display);}}/>
                     <ItemList items={this.getCurrentMenu()}/>
+                    <AddItem type={this.state.onDisplay} />
                     <button disabled={this.state.sending} className="btn" onClick={this.onLogout}>Logout</button>
                 </div>
             </div>

@@ -39,6 +39,13 @@ export default class Service{
         });
     }
 
+    static addMenuItem = (data: {name: string, description: string, price:number}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {})
+    }
+
     static reserveTable = (data: {name: string, day: string, hour: string, persons: number, phone: string}) => {
         return new Promise((
             resolve: (result: null) => void,
