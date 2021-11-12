@@ -39,6 +39,59 @@ export default class Service{
         });
     }
 
+    static addMenuItem = (data: {name: string, description: string, price:number, category: string}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log("token", localStorage.getItem('jwt'));
+            fetch(this.apiUri + 'dishes/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                //credentials: 'include',
+                body: JSON.stringify({...data})
+            }).then((response) => {
+                    if (response.status == 200) {
+                        resolve(null);
+                    } else if (response.status == 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+    })
+    }
+
+    static deleteMenuItem = (data: {id: number}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            fetch(this.apiUri + `dishes/${data.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                //credentials: 'include',
+                body: JSON.stringify({...data})
+            }).then((response) => {
+                    if (response.status == 204) {
+                        resolve(null);
+                    } else if (response.status == 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
+    }
+
     static reserveTable = (data: {name: string, day: string, hour: string, persons: number, phone: string}) => {
         return new Promise((
             resolve: (result: null) => void,

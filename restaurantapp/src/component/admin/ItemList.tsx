@@ -4,6 +4,7 @@ import Item from "./Item";
 
 type Props = {
     items: Array<FoodItem>
+    updateCallback: () => void;
 }
 type State = {
     changed: boolean
@@ -16,7 +17,8 @@ export default class ItemList extends React.Component<Props, State>{
         }
     }
     render() {
-        const itemList = this.props.items.map(item => <Item item={item} key={item.id}/>);
+        const itemList = this.props.items.map(item =>
+            <Item item={item} key={item.id} updateCallback={this.props.updateCallback}/>);
         return(
             <table className="table-striped">
                 <thead>
@@ -24,6 +26,7 @@ export default class ItemList extends React.Component<Props, State>{
                         <th>Name</th>
                         <th>Description</th>
                         <th>Price</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
