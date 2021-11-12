@@ -2,7 +2,8 @@ import React from "react";
 import {FoodItem} from "../../model/FoodItem";
 import Service from "../../service/Service";
 type Props = {
-    item: FoodItem
+    item: FoodItem;
+    updateCallback: () => void;
 }
 type State = {
     fetching: boolean,
@@ -23,7 +24,10 @@ export default class Item extends React.Component<Props, State>{
             .catch((error) => {
                 this.setState({error: String(error)});
             })
-            .finally(() => {this.setState({fetching: false})});
+            .finally(() => {
+                this.setState({fetching: false});
+                this.props.updateCallback();
+            });
     }
     render() {
         const item = this.props.item;

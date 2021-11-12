@@ -6,6 +6,7 @@ import Service from "../../service/Service";
 
 type Props = {
     type: DishType;
+    updateCallback: () => void;
 }
 type State = {
     sending: boolean,
@@ -43,7 +44,10 @@ export default class AddItem extends React.Component<Props, State>{
             .catch((error) => {
                 this.setState({error: String(error)});
             })
-            .finally(() => {this.setState({sending: false})});
+            .finally(() => {
+                this.setState({sending: false});
+                this.props.updateCallback()
+            });
     }
     setValue(event:any){
         const inputName = event.target.name;

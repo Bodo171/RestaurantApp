@@ -25,15 +25,20 @@ export default class Adminpage extends React.Component<{},State>{
         }
         this.onLogout = this.onLogout.bind(this);
         this.onDisplayChange = this.onDisplayChange.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
     }
 
-    componentDidMount() {
+    onUpdate(){
         Service.getMenu().then((menu:Menu) => {
             this.setState({...this.state, menu: menu, fetching: false});
             CreateOwlCarousels();
         }).catch((error:any) => {
             alert(error);
         });
+    }
+
+    componentDidMount() {
+       this.onUpdate();
     }
 
     onDisplayChange(onDisplayStr: string){
@@ -73,8 +78,8 @@ export default class Adminpage extends React.Component<{},State>{
             <div style={{display: "flex", alignItems: "center", justifyContent: 'center'}}>
                 <div style={{marginTop: '10px', marginBottom: '10px'}}>
                     <DisplaySelect defaultValue={this.state.onDisplay} onChange={(display: string) => {this.onDisplayChange(display);}}/>
-                    <ItemList items={this.getCurrentMenu()}/>
-                    <AddItem type={this.state.onDisplay} />
+                    <ItemList items={this.getCurrentMenu()} updateCallback={this.onUpdate}/>
+                    <AddItem type={this.state.onDisplay} updateCallback={this.onUpdate}/>
                     <button disabled={this.state.sending} className="btn" onClick={this.onLogout}>Logout</button>
                 </div>
             </div>
