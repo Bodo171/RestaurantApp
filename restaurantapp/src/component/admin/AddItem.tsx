@@ -14,6 +14,7 @@ type State = {
         name: string;
         description: string;
         price: number;
+        category: string;
     }
 }
 export default class AddItem extends React.Component<Props, State>{
@@ -26,6 +27,8 @@ export default class AddItem extends React.Component<Props, State>{
                 name: '',
                 description: '',
                 price: 0,
+                category: props.type
+                //image: null,
             }
         }
         this.setValue = this.setValue.bind(this);
@@ -50,9 +53,12 @@ export default class AddItem extends React.Component<Props, State>{
         if("name" === inputName) fields.name = String(value);
         if("description" === inputName) fields.description = String(value);
         if("price" === inputName) fields.price = Number(value);
-        this.setState({fields: fields});
+        //this.setState(...this.state,{fields: fields});
     }
-
+    /*uploadImage(event:any){
+        this.setState({...this.state,
+            fields{...this.state.fields, image: event.files[0]});
+    }*/
     render(){
         return (
             <div>

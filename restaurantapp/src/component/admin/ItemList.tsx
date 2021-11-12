@@ -24,6 +24,7 @@ export default class ItemList extends React.Component<Props, State>{
                         <th>Name</th>
                         <th>Description</th>
                         <th>Price</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
