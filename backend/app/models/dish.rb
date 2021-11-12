@@ -9,6 +9,8 @@ class Dish < ApplicationRecord
   validates :image, content_type: { in: %w[image/jpeg image/gif image/png], message: 'sugem'}
 
   def image_url
+    return unless image.attached?
+    
     Rails.env.production? ? image.url : Rails.application.routes.url_helpers.rails_blob_url(image)
   end
 end
