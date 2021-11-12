@@ -35,7 +35,7 @@ export default class Item extends React.Component<Props, State>{
                 <td>{item.name}</td>
                 <td>{item.description}</td>
                 <td>Price {item.price} </td>
-                <td><button onClick={this.onDelete}>Delete</button></td>
+                <td><button onClick={this.onDelete} className="btn">Delete</button></td>
             </tr>
     }
 }
