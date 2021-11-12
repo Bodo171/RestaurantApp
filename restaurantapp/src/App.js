@@ -69,7 +69,7 @@ export default class App extends React.Component {
           </Route>
 
           <Route path="/menu">
-            <HeaderBar title="Meniu" body="Even more vrajeala..." />
+            <HeaderBar title="Meniu"/>
             <MenuPage/>
           </Route>
 

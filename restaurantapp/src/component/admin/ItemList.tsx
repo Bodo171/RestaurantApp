@@ -1,5 +1,4 @@
 import React from "react";
-import {DishType, emptyMenu} from "../../util/util";
 import {FoodItem} from "../../model/FoodItem";
 import Item from "./Item";
 
@@ -20,12 +19,16 @@ export default class ItemList extends React.Component<Props, State>{
         const itemList = this.props.items.map(item => <Item item={item} key={item.id}/>);
         return(
             <table className="table-striped">
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                </tr>
-                {itemList}
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {itemList}
+                </tbody>
             </table>
     )
     }
