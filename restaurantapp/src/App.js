@@ -8,6 +8,7 @@ import Footer from './component/Footer';
 import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
+import Editpage from "./component/Editpage";
 
 export default class App extends React.Component {
   render(){
@@ -71,6 +72,11 @@ export default class App extends React.Component {
           <Route path="/menu">
             <HeaderBar title="Meniu"/>
             <MenuPage/>
+          </Route>
+
+          <Route path="/edit/:id">
+            <HeaderBar title="Edit" body="Edit"/>
+            <Editpage/>
           </Route>
 
           <Route path="/contact">

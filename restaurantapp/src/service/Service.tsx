@@ -39,6 +39,38 @@ export default class Service{
         });
     }
 
+    static getMenuItem = (id: number) => {
+        return new Promise((
+            resolve: (menuItem: FoodItem) => void,
+            reject: (error: any) => void
+        ) => {
+            const getDish: (dishJson: any) => FoodItem = (dishJson) => {
+                return {
+                    id: dishJson.id,
+                    name: dishJson.attributes.name,
+                    description: dishJson.attributes.description,
+                    price: dishJson.attributes.price,
+                    image: dishJson.attributes.image,
+                }
+            }
+            fetch(this.apiUri + `dishes/${id}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            }).then((response) =>{
+                    response.json().then(
+                        (itemJson) => {
+                            resolve(
+                                getDish(itemJson)
+                            );
+                        }
+                    )
+                }
+            ).catch((error) => {
+                reject('Internal server error' + error.status);
+            });
+        });
+    }
+
     static addMenuItem = (data: {name: string, description: string, price:number, category: string}) => {
         return new Promise((
             resolve: (success: null) => void,
@@ -64,6 +96,33 @@ export default class Service{
                 }
             );
     })
+    }
+
+    static updateMenuItem = (data: {id: number, name: string, description: string, price:number}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log("token", localStorage.getItem('jwt'));
+            fetch(this.apiUri + `dishes/${data.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                //credentials: 'include',
+                body: JSON.stringify({...data})
+            }).then((response) => {
+                    if (response.status == 200) {
+                        resolve(null);
+                    } else if (response.status == 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
     }
 
     static deleteMenuItem = (data: {id: number}) => {
