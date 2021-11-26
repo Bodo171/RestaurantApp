@@ -1,6 +1,7 @@
 import React from "react";
 import {FoodItem} from "../../model/FoodItem";
 import Service from "../../service/Service";
+import {Link} from "react-router-dom";
 type Props = {
     item: FoodItem;
     updateCallback: () => void;
@@ -17,6 +18,7 @@ export default class Item extends React.Component<Props, State>{
             error: '',
         }
         this.onDelete = this.onDelete.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
     }
     onDelete(){
         this.setState({fetching: true, error: ''});
@@ -29,13 +31,19 @@ export default class Item extends React.Component<Props, State>{
                 this.props.updateCallback();
             });
     }
+    onUpdate(){
+        window.location.href = `/edit/${this.props.item.id}`;
+    }
     render() {
         const item = this.props.item;
         return <tr>
                 <td>{item.name}</td>
                 <td>{item.description}</td>
                 <td>Price {item.price} </td>
-                <td><button onClick={this.onDelete} className="btn">Delete</button></td>
+                <td>
+                    <button onClick={this.onDelete} className="btn">Delete</button>
+                    <Link to={`/edit/${this.props.item.id}`}><button className="btn">Update</button></Link>
+                </td>
             </tr>
     }
 }

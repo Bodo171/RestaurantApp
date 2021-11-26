@@ -5,20 +5,21 @@ import {FoodItem} from "../model/FoodItem";
 export default class Service{
     static apiUri = 'https://restaurant-bckend.herokuapp.com/';
 
+    static getDish: (dishJson: any) => FoodItem = (dishJson) => {
+        return {
+            id: dishJson.id,
+            name: dishJson.attributes.name,
+            description: dishJson.attributes.description,
+            price: dishJson.attributes.price,
+            image: dishJson.attributes.image,
+        }
+    }
+
     static getMenu = () => {
         return new Promise((
             resolve: (menu: Menu) => void,
             reject: (error: any) => void
         ) => {
-            const getDish: (dishJson: any) => FoodItem = (dishJson) => {
-                return {
-                    id: dishJson.id,
-                    name: dishJson.attributes.name,
-                    description: dishJson.attributes.description,
-                    price: dishJson.attributes.price,
-                    image: dishJson.attributes.image,
-                }
-            }
             fetch(this.apiUri + 'dishes', {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
@@ -26,10 +27,34 @@ export default class Service{
                     response.json().then(
                         (menuJson) => {
                             resolve({
-                                breakfast: menuJson.breakfast.data.map(getDish),
-                                lunch: menuJson.lunch.data.map(getDish),
-                                dinner: menuJson.dinner.data.map(getDish),
+                                breakfast: menuJson.breakfast.data.map(this.getDish),
+                                lunch: menuJson.lunch.data.map(this.getDish),
+                                dinner: menuJson.dinner.data.map(this.getDish),
                             });
+                        }
+                    )
+                }
+            ).catch((error) => {
+                reject('Internal server error' + error.status);
+            });
+        });
+    }
+
+    static getMenuItem = (id: number) => {
+        return new Promise((
+            resolve: (menuItem: FoodItem) => void,
+            reject: (error: any) => void
+        ) => {
+            fetch(this.apiUri + `dishes/${id}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            }).then((response) =>{
+                    response.json().then(
+                        (itemJson) => {
+                            console.log(itemJson);
+                            resolve(
+                                this.getDish(itemJson.data)
+                            );
                         }
                     )
                 }
@@ -64,6 +89,33 @@ export default class Service{
                 }
             );
     })
+    }
+
+    static updateMenuItem = (data: {id: number, name: string, description: string, price:number}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log("token", localStorage.getItem('jwt'));
+            fetch(this.apiUri + `dishes/${data.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                //credentials: 'include',
+                body: JSON.stringify({...data})
+            }).then((response) => {
+                    if (response.status == 200) {
+                        resolve(null);
+                    } else if (response.status == 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
     }
 
     static deleteMenuItem = (data: {id: number}) => {

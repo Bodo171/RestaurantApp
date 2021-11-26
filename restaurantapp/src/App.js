@@ -8,6 +8,7 @@ import Footer from './component/Footer';
 import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
+import Editpage from "./component/Editpage";
 
 export default class App extends React.Component {
   render(){
@@ -72,6 +73,12 @@ export default class App extends React.Component {
             <HeaderBar title="Meniu"/>
             <MenuPage/>
           </Route>
+
+          <Route path="/edit/:id" render={(props)=>(<>
+            <HeaderBar title="Edit" body="Edit"/>
+            <Editpage id={props.match.params.id}/>
+          </>)}
+          />
 
           <Route path="/contact">
             <HeaderBar title="Contact" body="Vrei să ne trimiți un feedback sau să ne contactezi pentru relații de business? Folosește chestionarul de mai jos pentru a lua legătura cu noi!" />

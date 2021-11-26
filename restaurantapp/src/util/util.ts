@@ -18,3 +18,13 @@ export function dishTypeFromString(dishTypeStr: string){
 export const emptyMenu = () => {
     return { breakfast: [], lunch: [], dinner: [] };
 }
+
+export const emptyMenuItem = (id: number, category: DishType) => {
+    return {
+        id: id,
+        name: '',
+        description: '',
+        price: 0,
+        category: category
+    }
+}
