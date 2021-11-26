@@ -59,7 +59,8 @@ export default class EditItem extends React.Component<Props, State>{
                 })
                 .finally(() => {
                     this.setState({sending: false});
-                    this.props.updateCallback();
+                    if (this.state.error == '')
+                        this.props.updateCallback();
                 });
         }
     }
