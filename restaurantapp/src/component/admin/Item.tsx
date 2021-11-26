@@ -1,6 +1,7 @@
 import React from "react";
 import {FoodItem} from "../../model/FoodItem";
 import Service from "../../service/Service";
+import {Link} from "react-router-dom";
 type Props = {
     item: FoodItem;
     updateCallback: () => void;
@@ -41,7 +42,7 @@ export default class Item extends React.Component<Props, State>{
                 <td>Price {item.price} </td>
                 <td>
                     <button onClick={this.onDelete} className="btn">Delete</button>
-                    <button onClick={this.onUpdate} className="btn">Update</button>
+                    <Link to={`/edit/${this.props.item.id}`}><button className="btn">Update</button></Link>
                 </td>
             </tr>
     }

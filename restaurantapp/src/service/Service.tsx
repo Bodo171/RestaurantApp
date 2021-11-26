@@ -5,20 +5,21 @@ import {FoodItem} from "../model/FoodItem";
 export default class Service{
     static apiUri = 'https://restaurant-bckend.herokuapp.com/';
 
+    static getDish: (dishJson: any) => FoodItem = (dishJson) => {
+        return {
+            id: dishJson.id,
+            name: dishJson.attributes.name,
+            description: dishJson.attributes.description,
+            price: dishJson.attributes.price,
+            image: dishJson.attributes.image,
+        }
+    }
+
     static getMenu = () => {
         return new Promise((
             resolve: (menu: Menu) => void,
             reject: (error: any) => void
         ) => {
-            const getDish: (dishJson: any) => FoodItem = (dishJson) => {
-                return {
-                    id: dishJson.id,
-                    name: dishJson.attributes.name,
-                    description: dishJson.attributes.description,
-                    price: dishJson.attributes.price,
-                    image: dishJson.attributes.image,
-                }
-            }
             fetch(this.apiUri + 'dishes', {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
@@ -26,9 +27,9 @@ export default class Service{
                     response.json().then(
                         (menuJson) => {
                             resolve({
-                                breakfast: menuJson.breakfast.data.map(getDish),
-                                lunch: menuJson.lunch.data.map(getDish),
-                                dinner: menuJson.dinner.data.map(getDish),
+                                breakfast: menuJson.breakfast.data.map(this.getDish),
+                                lunch: menuJson.lunch.data.map(this.getDish),
+                                dinner: menuJson.dinner.data.map(this.getDish),
                             });
                         }
                     )
@@ -44,23 +45,15 @@ export default class Service{
             resolve: (menuItem: FoodItem) => void,
             reject: (error: any) => void
         ) => {
-            const getDish: (dishJson: any) => FoodItem = (dishJson) => {
-                return {
-                    id: dishJson.id,
-                    name: dishJson.attributes.name,
-                    description: dishJson.attributes.description,
-                    price: dishJson.attributes.price,
-                    image: dishJson.attributes.image,
-                }
-            }
             fetch(this.apiUri + `dishes/${id}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
             }).then((response) =>{
                     response.json().then(
                         (itemJson) => {
+                            console.log(itemJson);
                             resolve(
-                                getDish(itemJson)
+                                this.getDish(itemJson.data)
                             );
                         }
                     )

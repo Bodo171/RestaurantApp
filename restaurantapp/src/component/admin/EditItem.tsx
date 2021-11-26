@@ -20,6 +20,7 @@ type State = {
 export default class EditItem extends React.Component<Props, State>{
     constructor(props:any){
         super(props);
+        console.log(props);
         this.state = {
             sending: false,
             error: '',
@@ -66,17 +67,17 @@ export default class EditItem extends React.Component<Props, State>{
                     <div>Update item</div>
                     <div>
                         <fieldset>
-                            <input name="name" type="text" className="form-control" id="update-name" placeholder="Name" onChange={this.setValue} required />
+                            <input name="name" type="text" className="form-control" id="update-name" placeholder="Name" onChange={this.setValue} defaultValue={this.props.name} required />
                         </fieldset>
                     </div>
                     <div >
                         <fieldset>
-                            <input name="description" type="text" className="form-control" id="update-description" placeholder="Description" onChange={this.setValue} required />
+                            <input name="description" type="text" className="form-control" id="update-description" placeholder="Description" onChange={this.setValue} defaultValue={this.props.description} required />
                         </fieldset>
                     </div>
                     <div>
                         <fieldset>
-                            <input name="price" type="text" className="form-control" id="update-price" placeholder="Price" onChange={this.setValue} required />
+                            <input name="price" type="text" className="form-control" id="update-price" placeholder="Price" onChange={this.setValue} defaultValue={this.props.price} required />
                         </fieldset>
                     </div>
                     <div style={{marginTop: '10px', marginBottom: '10px'}}>

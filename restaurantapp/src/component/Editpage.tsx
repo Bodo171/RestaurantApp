@@ -11,11 +11,9 @@ import {FoodItem} from "../model/FoodItem";
 import { RouteComponentProps } from 'react-router';
 import EditItem from "./admin/EditItem";
 
-interface MatchParams {
-    id?: string;
-}
 
-interface EditpageProps extends RouteComponentProps<MatchParams> {
+interface EditpageProps{
+    id?: string;
 }
 
 type State = {
@@ -46,7 +44,7 @@ export default class Editpage extends React.Component<EditpageProps,State>{
 
 
     componentDidMount() {
-        let id = +(this.props.match.params.id || '0');
+        let id = +(this.props.id || '0');
         Service.getMenuItem(id).then((menuItem: FoodItem) => {
             this.setState({...this.state, fields: menuItem, loading: false});
             CreateOwlCarousels();
