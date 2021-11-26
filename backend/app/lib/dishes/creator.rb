@@ -20,7 +20,7 @@ class Dishes::Creator
       price: attrs.price
     )
 
-    # dish.image.attach(attrs.image)
+    dish.image.attach(attrs.image)
 
     dish
   end
