@@ -113,9 +113,9 @@ export default class Service{
                 //credentials: 'include',
                 body: JSON.stringify({...data})
             }).then((response) => {
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         resolve(null);
-                    } else if (response.status == 400){
+                    } else if (response.status === 400){
                         reject("Invalid dish");
                     } else {
                         reject("Server error");

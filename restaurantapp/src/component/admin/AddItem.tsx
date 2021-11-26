@@ -17,7 +17,8 @@ type State = {
         price: number;
         category: string;
         image: File;
-    }
+    },
+    inputImage: string
 }
 export default class AddItem extends React.Component<Props, State>{
     constructor(props:any){
@@ -31,10 +32,10 @@ export default class AddItem extends React.Component<Props, State>{
                 price: 0,
                 category: props.type,
                 image: new File([], 'undefined'),
-            }
+            },
+            inputImage: '/img/placeholder.jpg'
         }
         this.setValue = this.setValue.bind(this);
-        this.handleFileInput = this.handleFileInput.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
     onSubmit(event: any){
@@ -43,11 +44,11 @@ export default class AddItem extends React.Component<Props, State>{
 
         this.setState({sending: true, error: ''});
         if (this.state.fields.image.name === 'undefined'){
-            alert("Please select image!");
+            this.setState({sending: false, error: 'Please select an image'});
         }else{
             Service.addMenuItem(this.state.fields)
                 .catch((error) => {
-                    this.setState({error: String(error)});
+                    this.setState({error: String(error), sending: false});
                 })
                 .finally(() => {
                     this.setState({sending: false});
@@ -64,17 +65,17 @@ export default class AddItem extends React.Component<Props, State>{
         if("name" === inputName) fields.name = String(value);
         if("description" === inputName) fields.description = String(value);
         if("price" === inputName) fields.price = Number(value);
-        if("image" === inputName) fields.image = event.target.files[0];
+        if("image" === inputName){
+            fields.image = event.target.files[0];
+            let reader = new FileReader();
+            reader.onload = (ev: ProgressEvent<FileReader>) => {
+                if (ev.target) this.setState({inputImage: String(ev.target.result)});
+            }
+            reader.readAsDataURL(fields.image);
+        }
+        
         //this.setState(...this.state,{fields: fields});
     }
-
-    handleFileInput(event: any){
-        
-    }
-    /*uploadImage(event:any){
-        this.setState({...this.state,
-            fields{...this.state.fields, image: event.files[0]});
-    }*/
     render(){
         return (
             <div>
@@ -98,8 +99,11 @@ export default class AddItem extends React.Component<Props, State>{
                     </div>
                     <div>
                         <fieldset>
-                            <input name="image" type="file" className="form-control" id="add-image" onChange={this.setValue} required/>
+                            <input name="image" type="file" accept="image/*" className="form-control" id="add-image" onChange={this.setValue} required/> 
                         </fieldset>
+                    </div>
+                    <div>
+                        <img src={this.state.inputImage} alt="bad" style={{maxWidth: '400px', maxHeight: '400px'}}/>
                     </div>
                     <div style={{marginTop: '10px', marginBottom: '10px'}}>
                         <button disabled={this.state.sending} type="submit" id="form-submit" className="btn" onClick={this.onSubmit}>Add dish</button>
