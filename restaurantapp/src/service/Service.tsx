@@ -98,7 +98,7 @@ export default class Service{
         ) => {
             console.log("token", localStorage.getItem('jwt'));
             fetch(this.apiUri + `dishes/${data.id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('jwt')

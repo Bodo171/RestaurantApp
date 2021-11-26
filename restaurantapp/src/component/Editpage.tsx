@@ -26,41 +26,18 @@ type State = {
         price: number;
     }
 }
-export default class Editpage extends React.Component<EditpageProps,State>{
+export default class Editpage extends React.Component<EditpageProps,{}>{
     constructor(props:any){
         super(props);
-        this.state = {
-            loading: true,
-            sending: false,
-            fields: {
-                id: 0,
-                name: '',
-                description: '',
-                price: 0,
-            }
-        }
         this.goBack = this.goBack.bind(this);
     }
 
-
-    componentDidMount() {
-        let id = +(this.props.id || '0');
-        Service.getMenuItem(id).then((menuItem: FoodItem) => {
-            this.setState({...this.state, fields: menuItem, loading: false});
-            CreateOwlCarousels();
-        }).catch((error:any) => {
-            alert(error);
-        });
-    }
     goBack(){
         window.location.href = '/admin'
     }
     render(){
         return (
-            <EditItem id={this.state.fields.id}
-                      name={this.state.fields.name}
-                      description={this.state.fields.description}
-                      price={this.state.fields.price}
+            <EditItem id={+(this.props.id||'0')}
                       updateCallback={this.goBack}
 
             />
