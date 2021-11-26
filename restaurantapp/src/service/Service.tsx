@@ -71,31 +71,38 @@ export default class Service{
         });
     }
 
-    static addMenuItem = (data: {name: string, description: string, price:number, category: string}) => {
+    static addMenuItem = (data: {name: string, description: string, price:number, category: string, image: File}) => {
         return new Promise((
             resolve: (success: null) => void,
             reject: (error: any) => void
         ) => {
-            console.log("token", localStorage.getItem('jwt'));
+            console.log(data);
+            let formData = new FormData();
+            formData.append('name', data.name);
+            formData.append('description', data.description);
+            formData.append('price', String(data.price));
+            formData.append('category', data.category);
+            formData.append('image', data.image, data.image.name);
+
+
             fetch(this.apiUri + 'dishes/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    //'Content-Type': 'multipart/form-data',
                     'Authorization': 'Bearer ' + localStorage.getItem('jwt')
                 },
-                //credentials: 'include',
-                body: JSON.stringify({...data})
-            }).then((response) => {
-                    if (response.status == 200) {
+                body: formData
+            }).then((response: Response) => {
+                    if (response.status === 200) {
                         resolve(null);
-                    } else if (response.status == 400){
+                    } else if (response.status === 400){
                         reject("Invalid dish");
                     } else {
                         reject("Server error");
                     }
                 }
             );
-    })
+        });
     }
 
     static updateMenuItem = (data: {id: number, name: string, description: string, price:number}) => {

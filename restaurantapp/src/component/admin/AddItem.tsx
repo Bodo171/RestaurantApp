@@ -16,6 +16,7 @@ type State = {
         description: string;
         price: number;
         category: string;
+        image: File;
     }
 }
 export default class AddItem extends React.Component<Props, State>{
@@ -28,11 +29,12 @@ export default class AddItem extends React.Component<Props, State>{
                 name: '',
                 description: '',
                 price: 0,
-                category: props.type
-                //image: null,
+                category: props.type,
+                image: new File([], 'undefined'),
             }
         }
         this.setValue = this.setValue.bind(this);
+        this.handleFileInput = this.handleFileInput.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
     onSubmit(event: any){
@@ -40,15 +42,20 @@ export default class AddItem extends React.Component<Props, State>{
         event.stopPropagation();
 
         this.setState({sending: true, error: ''});
-        Service.addMenuItem(this.state.fields)
-            .catch((error) => {
-                this.setState({error: String(error)});
-            })
-            .finally(() => {
-                this.setState({sending: false});
-                this.props.updateCallback()
-            });
+        if (this.state.fields.image.name === 'undefined'){
+            alert("Please select image!");
+        }else{
+            Service.addMenuItem(this.state.fields)
+                .catch((error) => {
+                    this.setState({error: String(error)});
+                })
+                .finally(() => {
+                    this.setState({sending: false});
+                    this.props.updateCallback()
+                });
+        }
     }
+
     setValue(event:any){
         const inputName = event.target.name;
         const value = event.target.value;
@@ -57,7 +64,12 @@ export default class AddItem extends React.Component<Props, State>{
         if("name" === inputName) fields.name = String(value);
         if("description" === inputName) fields.description = String(value);
         if("price" === inputName) fields.price = Number(value);
+        if("image" === inputName) fields.image = event.target.files[0];
         //this.setState(...this.state,{fields: fields});
+    }
+
+    handleFileInput(event: any){
+        
     }
     /*uploadImage(event:any){
         this.setState({...this.state,
@@ -82,6 +94,11 @@ export default class AddItem extends React.Component<Props, State>{
                     <div>
                         <fieldset>
                             <input name="price" type="text" className="form-control" id="add-price" placeholder="Price" onChange={this.setValue} required />
+                        </fieldset>
+                    </div>
+                    <div>
+                        <fieldset>
+                            <input name="image" type="file" className="form-control" id="add-image" onChange={this.setValue} required/>
                         </fieldset>
                     </div>
                     <div style={{marginTop: '10px', marginBottom: '10px'}}>
