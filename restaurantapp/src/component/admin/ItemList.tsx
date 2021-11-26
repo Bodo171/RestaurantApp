@@ -1,6 +1,7 @@
 import React from "react";
 import {FoodItem} from "../../model/FoodItem";
 import Item from "./Item";
+import '../../index.css';
 
 type Props = {
     items: Array<FoodItem>
@@ -20,7 +21,7 @@ export default class ItemList extends React.Component<Props, State>{
         const itemList = this.props.items.map(item =>
             <Item item={item} key={item.id} updateCallback={this.props.updateCallback}/>);
         return(
-            <table className="table-striped">
+            <table className="table-striped item-table">
                 <thead>
                     <tr>
                         <th>Name</th>

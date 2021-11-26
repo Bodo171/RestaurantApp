@@ -22,6 +22,8 @@ type State = {
     inputImage: string;
 }
 export default class EditItem extends React.Component<Props, State>{
+    fileInput: HTMLInputElement|null = null;
+
     constructor(props:any){
         super(props);
         console.log("props", props);
@@ -87,7 +89,7 @@ export default class EditItem extends React.Component<Props, State>{
             reader.onload = (ev: ProgressEvent<FileReader>) => {
                 if (ev.target) this.setState({inputImage: String(ev.target.result)});
             }
-            reader.readAsDataURL(fields.image);
+            if (fields.image.name !== 'undefined') reader.readAsDataURL(fields.image);
         }
         this.setState({...this.state,fields: fields});
     }
@@ -98,7 +100,7 @@ export default class EditItem extends React.Component<Props, State>{
                 {this.state.fields && (
                 <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
                     <span style={{marginTop: '10px', color: "red" }}>{this.state.error}</span>
-                    <div>Update item</div>
+                    <label>Update item</label>
                     <div>
                         <fieldset>
                             <input name="name" type="text" className="form-control" id="update-name" placeholder="Name" onChange={this.setValue} defaultValue={this.state.fields.name} required />
@@ -116,14 +118,14 @@ export default class EditItem extends React.Component<Props, State>{
                     </div>
                     <div>
                         <fieldset>
-                            <input name="image" type="file" accept="image/*" className="form-control" id="add-image" onChange={this.setValue} required/> 
+                            <input ref={input => this.fileInput = input} name="image" type="file" accept="image/*" className="form-control" style={{display: 'none'}} id="add-image" onChange={this.setValue} required/> <br/>
                         </fieldset>
                     </div>
                     <div>
-                        <img src={this.state.inputImage} alt="bad" style={{maxWidth: '400px', maxHeight: '400px'}}/>
+                        <img src={this.state.inputImage} alt="bad" className="img-btn" onClick={() => {if (this.fileInput) this.fileInput.click()}}></img>
                     </div>
                     <div style={{marginTop: '10px', marginBottom: '10px'}}>
-                        <button disabled={this.state.sending} type="submit" id="form-submit" className="btn" onClick={this.onSubmit}>Update dish</button>
+                        <button disabled={this.state.sending} type="submit" id="form-submit" className="btn btn-success" onClick={this.onSubmit}>Update dish</button>
                     </div>
 
                 </div>)}

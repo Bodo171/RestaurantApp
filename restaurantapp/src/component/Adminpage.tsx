@@ -6,6 +6,7 @@ import {DishType, dishTypeFromString, emptyMenu} from "../util/util";
 import ItemList from "./admin/ItemList";
 import DisplaySelect from "./admin/DisplaySelect";
 import AddItem from "./admin/AddItem";
+import '../index.css';
 
 type State = {
     menu: Menu;

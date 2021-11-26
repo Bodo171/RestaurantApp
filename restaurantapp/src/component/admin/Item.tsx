@@ -41,8 +41,8 @@ export default class Item extends React.Component<Props, State>{
                 <td>{item.description}</td>
                 <td>Price {item.price} </td>
                 <td>
-                    <button onClick={this.onDelete} className="btn">Delete</button>
-                    <Link to={`/edit/${this.props.item.id}`}><button className="btn">Update</button></Link>
+                    <Link to={`/edit/${this.props.item.id}`}><button className="btn btn-info">Update</button></Link>
+                    <button onClick={this.onDelete} className="btn btn-danger">Delete</button>
                 </td>
             </tr>
     }
