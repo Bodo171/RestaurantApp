@@ -74,18 +74,11 @@ export default class App extends React.Component {
             <MenuPage/>
           </Route>
 
-<<<<<<< HEAD
-          <Route path="/edit/:id">
-            <HeaderBar title="Edit" body="Edit"/>
-            <Editpage/>
-          </Route>
-=======
           <Route path="/edit/:id" render={(props)=>(<>
             <HeaderBar title="Edit" body="Edit"/>
             <Editpage id={props.match.params.id}/>
           </>)}
           />
->>>>>>> a0b7519262afd9739e135e451c489d74b6693a0c
 
           <Route path="/contact">
             <HeaderBar title="Contact" body="Vrei să ne trimiți un feedback sau să ne contactezi pentru relații de business? Folosește chestionarul de mai jos pentru a lua legătura cu noi!" />

@@ -42,11 +42,7 @@ export default class Item extends React.Component<Props, State>{
                 <td>Price {item.price} </td>
                 <td>
                     <button onClick={this.onDelete} className="btn">Delete</button>
-<<<<<<< HEAD
-                    <button onClick={this.onUpdate} className="btn">Update</button>
-=======
                     <Link to={`/edit/${this.props.item.id}`}><button className="btn">Update</button></Link>
->>>>>>> a0b7519262afd9739e135e451c489d74b6693a0c
                 </td>
             </tr>
     }
