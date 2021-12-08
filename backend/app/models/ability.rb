@@ -7,6 +7,6 @@ class Ability
     user ||= User.new
 
     can :create, User if user.admin?
-    can %i[create update destroy], Dish if user.admin? # manager?
   end
+
 end
