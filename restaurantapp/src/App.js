@@ -9,8 +9,24 @@ import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
 import Editpage from "./component/Editpage";
+import { LocalReservationsStatus } from './model/LocalReservation';
+import Service from './service/Service';
+import Reservations from './service/Reservations';
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())
+    };
+  }
+
+  componentDidMount(){
+    Reservations.listen(() => {
+      this.setState({reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())});
+    });
+  }
+
   render(){
     const isLoggedIn = localStorage.getItem('jwt') !== null;
 
@@ -41,6 +57,11 @@ export default class App extends React.Component {
                 </ul>
               </div>
             </nav>
+            {this.state.reservationsStatus.length > 0 && <>
+              <div><a href='/'>{this.state.reservationsStatus}</a></div>
+              <br/>
+              </>
+            }
           </div>
         </div>
 

@@ -17,8 +17,8 @@ function ValidateReservationJSON (js: any){
     return true;
 }
 
-function LocalReservationFromJSON (js: any){
-    if (!ValidateReservationJSON(js)) throw "Invalid local reservation json!";
+function LocalReservationFromJSON(js: any) {
+    if (!ValidateReservationJSON(js)) throw new Error("Invalid local reservation json!");
     let reservation: LocalReservation = {
         id: js.id,
         status: LocalReservationType.WAITING,
@@ -38,18 +38,46 @@ function LocalReservationFromJSON (js: any){
     return reservation;
 }
 
-function LocalReservationToJSON (data: LocalReservation){
+function LocalReservationToJSON(data: LocalReservation) {
     let json = {
         id: data.id,
         status: 'waiting',
-        at: data.at.getUTCDate()
+        at: data.at.getTime()
     };
     switch (data.status){
         case LocalReservationType.ACCEPTED:
             json.status = 'accepted';
             break;
     }
+    return json;
 }
 
-export { LocalReservationType, LocalReservationFromJSON }
+function LocalReservationsStatus(reservations: Array<LocalReservation>) {
+    let waiting = 0,
+        accepted = 0,
+        refused = 0;
+    for (var i=0; i<reservations.length; i++){
+        switch(reservations[i].status){
+            case LocalReservationType.WAITING:
+                waiting++;
+                break;
+            case LocalReservationType.ACCEPTED:
+                accepted++;
+                break;
+            case LocalReservationType.REFUSED:
+                refused++;
+                break;
+        }
+    }
+    if (waiting + accepted + refused === 0) return '';
+    if (waiting === 1) return 'Ai o cerere de rezervare in asteptare...';
+    if (waiting > 1) return `Ai ${waiting} cereri de rezervare in asteptare...`;
+    if (accepted === 1) return 'Ai o cerere de rezervare acceptata!';
+    if (accepted > 1) return 'Ai cereri de rezervare acceptate!';
+    if (refused === 1) return 'Ai o cerere de rezervare refuzata!';
+    if (refused > 1) return 'Ai cereri de rezervare refuzate!';
+    return '';
+}
+
+export { LocalReservationType, LocalReservationFromJSON, LocalReservationToJSON, LocalReservationsStatus }
 export type { LocalReservation }
