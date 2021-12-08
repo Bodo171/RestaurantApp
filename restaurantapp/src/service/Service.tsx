@@ -1,6 +1,7 @@
 import { Menu } from "../model/Menu";
 import { User } from "../model/User";
 import {FoodItem} from "../model/FoodItem";
+import { LocalReservation, LocalReservationFromJSON } from "../model/LocalReservation";
 
 export default class Service{
     static apiUri = 'https://restaurant-bckend.herokuapp.com/';
@@ -232,5 +233,39 @@ export default class Service{
 
             
         });
+    }
+
+    static getLocalReservations = () => {
+        let data = localStorage.getItem('reservations');
+        if (!data) return [];
+        try{
+            data = JSON.parse(data);
+        }catch(e){
+            localStorage.removeItem('reservations');
+            return [];
+        }
+        if (!Array.isArray(data)){
+            localStorage.removeItem('reservations');
+            return [];
+        }
+        let reservations: Array<LocalReservation> = [];
+        for (let i = 0; i < data.length; i++){
+            try{
+                let res = LocalReservationFromJSON(data[i]);
+                reservations.push(res);
+            }catch(e){
+                console.error('Invalid reservation in local storage!');
+            }
+        }
+        return reservations;
+    }
+
+    static saveLocalReservation = (data: LocalReservation) => {
+        let reservations = localStorage.getItem('reservations');
+        if (!reservations){
+            localStorage.setItem('reservations', '');
+            reservations = '';
+        }
+        
     }
 }
