@@ -4,8 +4,9 @@ class ReservationsController < ApplicationController
 
   before_action(only: [:index]) { validate_object(Validations::Reservations::ReservationsListings) }
   before_action(only: :create) { validate_object(Validations::Reservations::CreateReservation) }
+  before_action(only: :confirm) { validate_object(Validations::Reservations::ConfirmReservation) }
 
-  before_action :authenticate_user!, except: %i[index create]
+  before_action :authenticate_user!, except: %i[index create confirm]
 
   def index
     reservations = Reservations::Finder.new(@validator).all
@@ -15,6 +16,12 @@ class ReservationsController < ApplicationController
 
   def create
     reservation = Reservations::Creator.new(@validator).run
+
+    render_response(ReservationSerializer.new(reservation))
+  end
+
+  def confirm
+    reservation = Reservations::Editor.new(@validator).run
 
     unless reservation.save
       render_response({ errors: reservation.errors }, status: :bad_request)

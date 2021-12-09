@@ -13,7 +13,7 @@ class Validations::Reservations::ReservationsListings < Validations::BaseValidat
   end
 
   def phone_number_format
-    if self.phone_number.present? #TODO add regex && !self.phone_number.match("") 
+    if self.phone_number.present? && !self.phone_number.match?("^[0-9]{10}$") 
       errors.add(:phone_number, 'Phone number format is not valid!')
     end
   end

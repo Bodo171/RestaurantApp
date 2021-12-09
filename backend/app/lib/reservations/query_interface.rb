@@ -4,4 +4,8 @@ module Reservations::QueryInterface
     Reservation.all
   end
 
+  def self.show(id)
+    Reservation.find(id)
+  end
+
 end
