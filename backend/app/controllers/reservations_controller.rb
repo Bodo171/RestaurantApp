@@ -6,7 +6,7 @@ class ReservationsController < ApplicationController
   before_action(only: :create) { validate_object(Validations::Reservations::CreateReservation) }
   before_action(only: :confirm) { validate_object(Validations::Reservations::ConfirmReservation) }
 
-  before_action :authenticate_user!, except: %i[index create confirm]
+  before_action :authenticate_user!, except: %i[index create]
 
   def index
     reservations = Reservations::Finder.new(@validator).all
