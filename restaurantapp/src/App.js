@@ -9,6 +9,7 @@ import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
 import Editpage from "./component/Editpage";
+import AdminReservationPage from "./component/AdminReservationPage";
 
 export default class App extends React.Component {
   render(){
@@ -56,6 +57,19 @@ export default class App extends React.Component {
               <Redirect to="/login"/>
             }
           </Route>
+
+          <Route path="/reservations">
+            {isLoggedIn &&
+            <>
+              <HeaderBar title="Rezervări" body="Esti logat" />
+              <AdminReservationPage/>
+            </>
+            }
+            {!isLoggedIn &&
+            <Redirect to="/login"/>
+            }
+          </Route>
+
           <Route path="/login">
             {isLoggedIn &&
               <Redirect to="/admin"/>
