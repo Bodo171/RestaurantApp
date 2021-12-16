@@ -12,6 +12,7 @@ import Editpage from "./component/Editpage";
 import { LocalReservationsStatus } from './model/LocalReservation';
 import Reservations from './service/Reservations';
 import ReservationPage from './component/ReservationPage';
+import AdminReservationPage from "./component/AdminReservationPage";
 
 export default class App extends React.Component {
   constructor(props){
@@ -81,6 +82,19 @@ export default class App extends React.Component {
               <Redirect to="/login"/>
             }
           </Route>
+
+          <Route path="/reservations">
+            {isLoggedIn &&
+            <>
+              <HeaderBar title="Rezervări" body="Esti logat" />
+              <AdminReservationPage/>
+            </>
+            }
+            {!isLoggedIn &&
+            <Redirect to="/login"/>
+            }
+          </Route>
+
           <Route path="/login">
             {isLoggedIn &&
               <Redirect to="/admin"/>
@@ -110,7 +124,7 @@ export default class App extends React.Component {
             <Contact/>
           </Route>
 
-          <Route path="/reservations">
+          <Route path="/myres">
             <HeaderBar title="Rezervări" body="Aici poti vedea rezervările tale actuale"/>
             <ReservationPage/>
           </Route>
