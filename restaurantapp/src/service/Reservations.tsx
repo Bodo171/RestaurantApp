@@ -2,15 +2,19 @@ import { LocalReservation, LocalReservationFromJSON, LocalReservationToJSON } fr
 
 
 export default class Reservations{
-    static __listeners: Array<()=>void> = [];
+    static __listeners: { [key: string]: ()=>void } = {};
 
-    static listen = (callback: () => void) => {
-        Reservations.__listeners.push(callback);
+    static listen = (id: string, callback: () => void) => {
+        Reservations.__listeners[id] = callback;
+    }
+
+    static unlisten = (id: string) => {
+        if (Reservations.__listeners[id]) delete Reservations.__listeners[id];
     }
 
     static trigger = () => {
-        for (var i=0; i<Reservations.__listeners.length; i++){
-            Reservations.__listeners[i]();
+        for (var key in Reservations.__listeners){
+            Reservations.__listeners[key]();
         }
     }
 

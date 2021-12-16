@@ -10,8 +10,8 @@ import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
 import Editpage from "./component/Editpage";
 import { LocalReservationsStatus } from './model/LocalReservation';
-import Service from './service/Service';
 import Reservations from './service/Reservations';
+import ReservationPage from './component/ReservationPage';
 
 export default class App extends React.Component {
   constructor(props){
@@ -22,9 +22,13 @@ export default class App extends React.Component {
   }
 
   componentDidMount(){
-    Reservations.listen(() => {
+    Reservations.listen("app", () => {
       this.setState({reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())});
     });
+  }
+
+  componentWillUnmount(){
+    Reservations.unlisten("app");
   }
 
   render(){
@@ -58,7 +62,7 @@ export default class App extends React.Component {
               </div>
             </nav>
             {this.state.reservationsStatus.length > 0 && <>
-              <div><a href='/'>{this.state.reservationsStatus}</a></div>
+              <div><Link to="/myres">{this.state.reservationsStatus}</Link></div>
               <br/>
               </>
             }
@@ -104,6 +108,11 @@ export default class App extends React.Component {
           <Route path="/contact">
             <HeaderBar title="Contact" body="Vrei să ne trimiți un feedback sau să ne contactezi pentru relații de business? Folosește chestionarul de mai jos pentru a lua legătura cu noi!" />
             <Contact/>
+          </Route>
+
+          <Route path="/reservations">
+            <HeaderBar title="Rezervări" body="Aici poti vedea rezervările tale actuale"/>
+            <ReservationPage/>
           </Route>
   
           <Route path="/" exact={true}>
