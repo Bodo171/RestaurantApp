@@ -1,7 +1,7 @@
 import { Menu } from "../model/Menu";
 import { User } from "../model/User";
 import {FoodItem} from "../model/FoodItem";
-import { LocalReservation, LocalReservationFromJSON, LocalReservationToJSON } from "../model/LocalReservation";
+import {Reservation} from "../model/Reservation";
 
 export default class Service{
     static apiUri = 'https://restaurant-bckend.herokuapp.com/';
@@ -164,6 +164,56 @@ export default class Service{
         });
     }
 
+    static getReservations = () => {
+        return new Promise((
+            resolve: (result: Array<Reservation>) => void,
+            reject: (error: any) => void
+        ) => {
+                fetch(this.apiUri + 'reservations', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                    },
+                }).then((response) =>{
+                        response.json().then(
+                            (reservationsJson) => {
+                                resolve(
+                                    reservationsJson.data
+                                );
+                            }
+                        )
+                    }
+                ).catch((error) => {
+                    reject('Internal server error' + error.status);
+                });
+            });
+    }
+
+    static confirmReservation(data: {id: number}){
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log("token", localStorage.getItem('jwt'));
+            fetch(this.apiUri + `reservations/confirm/${data.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+            }).then((response) => {
+                    if (response.status === 200) {
+                        resolve(null);
+                    } else if (response.status === 400){
+                        reject("Invalid request");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
+    }
     static login = (data: {email: string, password: string}) => {
         return new Promise((
             resolve: (success: null) => void,

@@ -6,6 +6,7 @@ import {DishType, dishTypeFromString, emptyMenu} from "../util/util";
 import ItemList from "./admin/ItemList";
 import DisplaySelect from "./admin/DisplaySelect";
 import AddItem from "./admin/AddItem";
+import {Link} from "react-router-dom";
 import '../index.css';
 
 type State = {
@@ -78,6 +79,9 @@ export default class Adminpage extends React.Component<{},State>{
         return (
             <div style={{display: "flex", alignItems: "center", justifyContent: 'center'}}>
                 <div style={{marginTop: '10px', marginBottom: '10px'}}>
+                    <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+                        <Link to="/reservations"><button className="btn info">Rezervări</button></Link> <br /> <br/>
+                    </div>
                     <DisplaySelect defaultValue={this.state.onDisplay} onChange={(display: string) => {this.onDisplayChange(display);}}/>
                     <ItemList items={this.getCurrentMenu()} updateCallback={this.onUpdate}/>
                     <AddItem type={this.state.onDisplay} updateCallback={this.onUpdate}/>

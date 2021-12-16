@@ -1,6 +1,6 @@
 class DishesController < ApplicationController
 
-  skip_authorization_check only: [:index]
+  skip_authorization_check
 
   before_action(only: [:index]) { validate_object(Validations::DishListings) }
   before_action(only: :create) { validate_object(Validations::CreateDish) }
@@ -22,7 +22,6 @@ class DishesController < ApplicationController
 
   def create
     dish = Dishes::Creator.new(@validator).run
-    authorize! :create, Dish
 
     unless dish.save
       render_response({ errors: dish.errors }, status: :bad_request)
@@ -40,7 +39,6 @@ class DishesController < ApplicationController
 
   def update
     dish = Dishes::Editor.new(@validator).run
-    authorize! :update, Dish
 
     unless dish.save
       render_response({ errors: dish.errors }, status: :bad_request)
@@ -52,7 +50,6 @@ class DishesController < ApplicationController
 
   def destroy
     dish = Dishes::Finder.new(@validator).one
-    authorize! :destroy, Dish
 
     dish.destroy
     render_response({}, status: :no_content)
