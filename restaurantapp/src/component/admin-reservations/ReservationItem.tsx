@@ -22,7 +22,7 @@ export default class ReservationItem extends React.Component<Props, State>{
     }
     onConfirm(){
         this.setState({fetching: true, error: ''});
-        Service.confirmReservation({id: this.props.reservation.id})
+        Service.confirmReservation({id: this.props.reservation.id, confirmed: "true"})
             .catch((error) => {
                 this.setState({error: String(error)});
             })
@@ -38,7 +38,7 @@ export default class ReservationItem extends React.Component<Props, State>{
             <td>{item.phone_number}</td>
             <td>{item.date} </td>
             <td>{item.table_size} </td>
-            <td>{item.confirmed} </td>
+            <td>{(item.confirmed) ? 'Confirmed': 'Not confirmed'} </td>
             <td>
                 <button onClick={this.onConfirm} className="btn btn-info">Confirm</button>
             </td>

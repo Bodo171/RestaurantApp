@@ -210,7 +210,7 @@ export default class Service{
             });
     }
 
-    static confirmReservation(data: {id: number}){
+    static confirmReservation(data: {id: number, confirmed: string}){
         return new Promise((
             resolve: (success: null) => void,
             reject: (error: any) => void
@@ -222,6 +222,9 @@ export default class Service{
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('jwt')
                 },
+                body: JSON.stringify(
+                    {confirmed: data.confirmed}
+                )
             }).then((response) => {
                     if (response.status === 200) {
                         resolve(null);
