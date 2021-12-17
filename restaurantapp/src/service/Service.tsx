@@ -16,6 +16,16 @@ export default class Service{
         }
     }
 
+    static getReservation: (reservationJson: any) => Reservation = (reservationJson) => {
+        return {
+            id: reservationJson.id,
+            date: reservationJson.attributes.date,
+            phone_number: reservationJson.attributes.phone_number,
+            confirmed: reservationJson.attributes.confirmed,
+            table_size: reservationJson.attributes.table_size
+        }
+    }
+
     static getMenu = () => {
         return new Promise((
             resolve: (menu: Menu) => void,
@@ -152,15 +162,25 @@ export default class Service{
         })
     }
 
-    static reserveTable = (data: {name: string, day: string, hour: string, persons: number, phone: string}) => {
+    static reserveTable = (data: {name: string, day: string, hour: string, table_size: number, phone: string}) => {
         return new Promise((
             resolve: (result: null) => void,
             reject: (error: any) => void
         ) => {
-            setTimeout(() => {
-                if (data.name === 'fail') reject('Cererea ta nu s-a putut procesa. Incearca mai tarziu!');
+            fetch(this.apiUri + 'reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    date: '2021-12-21T11:30',
+                    table_size: data.table_size,
+                    phone_number: data.phone
+                })
+            }).then((response) => {
+                if (response.status >= 400) reject('Cererea ta nu s-a putut procesa. Incearca mai tarziu!');
                 else resolve(null);
-            }, 2000);
+            });
         });
     }
 
@@ -179,7 +199,7 @@ export default class Service{
                         response.json().then(
                             (reservationsJson) => {
                                 resolve(
-                                    reservationsJson.data
+                                    reservationsJson.data.map(this.getReservation)
                                 );
                             }
                         )
@@ -190,18 +210,21 @@ export default class Service{
             });
     }
 
-    static confirmReservation(data: {id: number}){
+    static confirmReservation(data: {id: number, confirmed: string}){
         return new Promise((
             resolve: (success: null) => void,
             reject: (error: any) => void
         ) => {
             console.log("token", localStorage.getItem('jwt'));
-            fetch(this.apiUri + `reservations/confirm/${data.id}`, {
-                method: 'PUT',
+            fetch(this.apiUri + `reservations/${data.id}/confirm`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('jwt')
                 },
+                body: JSON.stringify(
+                    {confirmed: data.confirmed}
+                )
             }).then((response) => {
                     if (response.status === 200) {
                         resolve(null);

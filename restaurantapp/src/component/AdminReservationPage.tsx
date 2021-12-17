@@ -43,6 +43,7 @@ export default class AdminReservationPage extends React.Component<{},State>{
 
 
     render(){
+        console.log(this.state.reservations);
         return (
             <div style={{display: "flex", alignItems: "center", justifyContent: 'center'}}>
                 <div style={{marginTop: '10px', marginBottom: '10px'}}>
