@@ -10,7 +10,7 @@ type State = {
         hour: string;
         name: string;
         phone: string;
-        persons: number;
+        table_size: number;
     }
     error: string;
     success: string;
@@ -26,7 +26,7 @@ export default class BookTable extends React.Component<{}, State>{
                 hour: '',
                 name: '',
                 phone: '',
-                persons: 0
+                table_size: 0
             },
             error: '',
             success: '',
@@ -45,7 +45,7 @@ export default class BookTable extends React.Component<{}, State>{
         if("hour" === inputName) fields.hour = String(value);
         if("name" === inputName) fields.name = String(value);
         if("phone" === inputName) fields.phone = String(value);
-        if("persons" === inputName) fields.persons = Number(value);
+        if("tableSize" === inputName) fields.table_size = Number(value);
         this.setState({fields: fields});
     }
 
@@ -55,7 +55,7 @@ export default class BookTable extends React.Component<{}, State>{
         if (fields.hour === '') return "Te rog alege ora!";
         if (fields.name === '') return "Te rog completează numele!";
         if (fields.phone === '') return "Te rog adaugă număr de telefon!";
-        if (fields.persons === 0) return "Te rog selectează numărul de persoane!";
+        if (fields.table_size === 0) return "Te rog selectează numărul de persoane!";
         return "";
 
     }
@@ -84,7 +84,7 @@ export default class BookTable extends React.Component<{}, State>{
                     catch(e){
                         console.error(e);
                     }
-                    
+
                 })
                 .catch((error) => {
                     this.setState({sending: false, error: String(error)});
@@ -155,7 +155,7 @@ export default class BookTable extends React.Component<{}, State>{
                                         </div>
                                         <div className="col-md-6">
                                             <fieldset>
-                                                <select required className="person" name='persons' onChange={this.setValue}>
+                                                <select required className="person" name='tableSize' onChange={this.setValue}>
                                                     <option value="">Câte persoane?</option>
                                                     <option value="1">1 Persoană</option>
                                                     <option value="2">2 Persoane</option>

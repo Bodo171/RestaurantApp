@@ -28,6 +28,7 @@ export default class ReservationList extends React.Component<Props, State>{
                     <th>Id</th>
                     <th>Phone number</th>
                     <th>Time</th>
+                    <th>Table size</th>
                     <th>Confirmed</th>
                     <th>Actions</th>
                 </tr>

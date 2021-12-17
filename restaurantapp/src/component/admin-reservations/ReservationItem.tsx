@@ -35,8 +35,9 @@ export default class ReservationItem extends React.Component<Props, State>{
         const item = this.props.reservation;
         return <tr>
             <td>{item.id}</td>
-            <td>{item.phoneNumber}</td>
-            <td>{item.datetime} </td>
+            <td>{item.phone_number}</td>
+            <td>{item.date} </td>
+            <td>{item.table_size} </td>
             <td>{item.confirmed} </td>
             <td>
                 <button onClick={this.onConfirm} className="btn btn-info">Confirm</button>

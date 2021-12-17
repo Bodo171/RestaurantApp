@@ -1,7 +1,7 @@
 export interface Reservation{
     id: number;
-    tableSize: number;
-    phoneNumber: string;
-    datetime: string;
+    table_size: number;
+    phone_number: string;
+    date: string;
     confirmed: string;
 }
