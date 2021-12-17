@@ -7,7 +7,7 @@ class Reservations::Creator
   end
 
   def run
-    Reservation.new(parse_data)
+    Reservation.create(parse_data)
   end
 
   private
