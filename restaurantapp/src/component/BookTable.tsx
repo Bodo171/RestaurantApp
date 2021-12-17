@@ -2,7 +2,7 @@ import React from "react";
 import { LocalReservationType } from "../model/LocalReservation";
 import Reservations from "../service/Reservations";
 import Service from "../service/Service";
-
+import {getDates, getStr} from "../util/dateUtil"
 
 type State = {
     fields: {
@@ -94,6 +94,7 @@ export default class BookTable extends React.Component<{}, State>{
 
 
     render(){
+        const dates = getDates()
         return (
             <section id="book-table">
                 <div className="container">
@@ -119,13 +120,9 @@ export default class BookTable extends React.Component<{}, State>{
                                             <fieldset>
                                                 <select required name='day' onChange={this.setValue}>
                                                     <option value="">Alege ziua</option>
-                                                    <option value="Monday">Luni</option>
-                                                    <option value="Tuesday">Marți</option>
-                                                    <option value="Wednesday">Miercuri</option>
-                                                    <option value="Thursday">Joi</option>
-                                                    <option value="Friday">Vineri</option>
-                                                    <option value="Saturday">Sâmbătă</option>
-                                                    <option value="Sunday">Duminică</option>
+                                                    {dates.map(
+                                                        date => <option value={getStr(date)}>{getStr(date)}</option>
+                                                    )}
                                                 </select>
                                             </fieldset>
                                         </div>
@@ -133,13 +130,13 @@ export default class BookTable extends React.Component<{}, State>{
                                             <fieldset>
                                                 <select required name='hour' onChange={this.setValue} >
                                                     <option value="">Alege ora</option>
-                                                    <option value="10-00">10:00</option>
-                                                    <option value="12-00">12:00</option>
-                                                    <option value="14-00">14:00</option>
-                                                    <option value="16-00">16:00</option>
-                                                    <option value="18-00">18:00</option>
-                                                    <option value="20-00">20:00</option>
-                                                    <option value="22-00">22:00</option>
+                                                    <option value="10:00">10:00</option>
+                                                    <option value="12:00">12:00</option>
+                                                    <option value="14:00">14:00</option>
+                                                    <option value="16:00">16:00</option>
+                                                    <option value="18:00">18:00</option>
+                                                    <option value="20:00">20:00</option>
+                                                    <option value="22:00">22:00</option>
                                                 </select>
                                             </fieldset>
                                         </div>

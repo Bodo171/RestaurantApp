@@ -173,8 +173,8 @@ export default class Service{
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    date: '2021-12-21T11:30',
-                    table_size: data.table_size,
+                    date: data.day + 'T' + data.hour,
+                    table_size: String(data.table_size),
                     phone_number: data.phone
                 })
             }).then((response) => {
