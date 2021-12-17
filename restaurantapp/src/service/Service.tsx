@@ -174,7 +174,7 @@ export default class Service{
                 },
                 body: JSON.stringify({
                     date: '2021-12-21T11:30',
-                    table_size: data.table_size,
+                    table_size: String(data.table_size),
                     phone_number: data.phone
                 })
             }).then((response) => {
