@@ -9,9 +9,29 @@ import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
 import Editpage from "./component/Editpage";
+import { LocalReservationsStatus } from './model/LocalReservation';
+import Reservations from './service/Reservations';
+import ReservationPage from './component/ReservationPage';
 import AdminReservationPage from "./component/AdminReservationPage";
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())
+    };
+  }
+
+  componentDidMount(){
+    Reservations.listen("app", () => {
+      this.setState({reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())});
+    });
+  }
+
+  componentWillUnmount(){
+    Reservations.unlisten("app");
+  }
+
   render(){
     const isLoggedIn = localStorage.getItem('jwt') !== null;
 
@@ -42,6 +62,11 @@ export default class App extends React.Component {
                 </ul>
               </div>
             </nav>
+            {this.state.reservationsStatus.length > 0 && <>
+              <div><Link to="/myres">{this.state.reservationsStatus}</Link></div>
+              <br/>
+              </>
+            }
           </div>
         </div>
 
@@ -97,6 +122,11 @@ export default class App extends React.Component {
           <Route path="/contact">
             <HeaderBar title="Contact" body="Vrei să ne trimiți un feedback sau să ne contactezi pentru relații de business? Folosește chestionarul de mai jos pentru a lua legătura cu noi!" />
             <Contact/>
+          </Route>
+
+          <Route path="/myres">
+            <HeaderBar title="Rezervări" body="Aici poti vedea rezervările tale actuale"/>
+            <ReservationPage/>
           </Route>
   
           <Route path="/" exact={true}>
