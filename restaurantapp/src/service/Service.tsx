@@ -157,13 +157,14 @@ export default class Service{
             resolve: (result: null) => void,
             reject: (error: any) => void
         ) => {
-            fetch(this.apiUri + 'reservations', {
+            fetch(this.apiUri + 'reservation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    date: '2021-12-21 11:30',
+                    date: '2021-12-21T:::wq:eq' +
+                        '11:30',
                     table_size: data.table_size,
                     phone: data.phone
                 })
