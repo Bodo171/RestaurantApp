@@ -15,4 +15,8 @@ class Reservations::Finder
     reservations
   end
 
+  def one
+    Reservations::QueryInterface.show(attrs.id)
+  end
+
 end

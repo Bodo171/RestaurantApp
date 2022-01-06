@@ -1,6 +1,6 @@
 class Validations::Reservations::CreateReservation < Validations::BaseValidator
 
-  ATTR_LIST = %i[phone_number table_size date ]
+  ATTR_LIST = %i[phone_number table_size date]
 
   attr_accessor(*ATTR_LIST)
 

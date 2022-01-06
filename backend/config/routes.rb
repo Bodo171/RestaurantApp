@@ -11,7 +11,7 @@ Rails.application.routes.draw do
      }
 
   resources :dishes
-  resources :reservations, only: %i[index create] do
+  resources :reservations, only: %i[index show create] do
     member do
       patch :confirm
     end
