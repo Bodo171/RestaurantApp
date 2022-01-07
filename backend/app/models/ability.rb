@@ -5,7 +5,8 @@ class Ability
 
   def initialize(user)
     user ||= User.new
-    
+
     can :create, User if user.admin?
   end
+
 end

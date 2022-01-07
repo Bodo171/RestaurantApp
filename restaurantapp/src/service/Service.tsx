@@ -1,51 +1,275 @@
 import { Menu } from "../model/Menu";
 import { User } from "../model/User";
+import {FoodItem} from "../model/FoodItem";
+import {Reservation} from "../model/Reservation";
+import Reservations from "./Reservations";
+import { LocalReservation, LocalReservationType } from "../model/LocalReservation";
 
 export default class Service{
     static apiUri = 'https://restaurant-bckend.herokuapp.com/';
+
+    static getDish: (dishJson: any) => FoodItem = (dishJson) => {
+        return {
+            id: dishJson.id,
+            name: dishJson.attributes.name,
+            description: dishJson.attributes.description,
+            price: dishJson.attributes.price,
+            image: dishJson.attributes.image,
+        }
+    }
+
+    static getReservation: (reservationJson: any) => Reservation = (reservationJson) => {
+        return {
+            id: reservationJson.id,
+            date: reservationJson.attributes.date,
+            phone_number: reservationJson.attributes.phone_number,
+            confirmed: reservationJson.attributes.confirmed,
+            table_size: reservationJson.attributes.table_size
+        }
+    }
 
     static getMenu = () => {
         return new Promise((
             resolve: (menu: Menu) => void,
             reject: (error: any) => void
         ) => {
-            const dummyMenu: Menu = {
-                breakfast: [
-                    { name: 'Omleta cu banane', description: 'O omleta in care se pun 2 banane prajite', price: 7, image: 'img/breakfast_item.jpg' },
-                    { name: 'Castraveti murati', description: 'De douzeci de ani', price: 10, image: 'img/breakfast_item.jpg' },
-                    { name: 'Tuica din Mihaiesti', description: 'E 7 lei vrei sa gusti?', price: 7, image: 'img/breakfast_item.jpg' },
-                    { name: 'Omleta cu banane 2', description: 'O omleta in care se pun 2 banane prajite', price: 5, image: 'img/breakfast_item.jpg' },
-                    { name: 'Surpriza', description: 'Punem cate putin din tot ce avem in bucatarie', price: 21, image: 'img/breakfast_item.jpg' },
-                ],
-                lunch: [
-                    { name: 'Pulpe de broasca', description: '200g pulpe de broasca pe vatra', price: 17, image: 'img/lunch_item.jpg' },
-                    { name: 'Hrean caramelizat', description: 'Hreac cu caramel sarat', price: 14, image: 'img/lunch_item.jpg' }
-                ],
-                dinner: [
-                    { name: 'Gandaci din Vatra Dornei', description: '50g gandaci deosebiti culesi de experti', price: 35, image: 'img/dinner_item.jpg' },
-                    { name: 'Piure din parizer cu lapte', description: '150g parizer cu 300ml lapte si 35g sare in blender', price: 47, image: 'img/dinner_item.jpg' },
-                    { name: 'Corn cu ciocolata', description: 'Exact', price: 3, image: 'img/dinner_item.jpg' }
-                ]
-            };
-            setTimeout(()=>{
-                resolve(dummyMenu);
-            }, 1500);
-            
+            fetch(this.apiUri + 'dishes', {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            }).then((response) =>{
+                    response.json().then(
+                        (menuJson) => {
+                            resolve({
+                                breakfast: menuJson.breakfast.data.map(this.getDish),
+                                lunch: menuJson.lunch.data.map(this.getDish),
+                                dinner: menuJson.dinner.data.map(this.getDish),
+                            });
+                        }
+                    )
+                }
+            ).catch((error) => {
+                reject('Internal server error' + error.status);
+            });
         });
     }
 
-    static reserveTable = (data: {name: string, day: string, hour: string, persons: number, phone: string}) => {
+    static getMenuItem = (id: number) => {
+        return new Promise((
+            resolve: (menuItem: FoodItem) => void,
+            reject: (error: any) => void
+        ) => {
+            fetch(this.apiUri + `dishes/${id}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            }).then((response) =>{
+                    response.json().then(
+                        (itemJson) => {
+                            console.log(itemJson);
+                            resolve(
+                                this.getDish(itemJson.data)
+                            );
+                        }
+                    )
+                }
+            ).catch((error) => {
+                reject('Internal server error' + error.status);
+            });
+        });
+    }
+
+    static addMenuItem = (data: {name: string, description: string, price:number, category: string, image: File}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log(data);
+            let formData = new FormData();
+            formData.append('name', data.name);
+            formData.append('description', data.description);
+            formData.append('price', String(data.price));
+            formData.append('category', data.category);
+            formData.append('image', data.image, data.image.name);
+
+
+            fetch(this.apiUri + 'dishes/', {
+                method: 'POST',
+                headers: {
+                    //'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                body: formData
+            }).then((response: Response) => {
+                    if (response.status === 200) {
+                        resolve(null);
+                    } else if (response.status === 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        });
+    }
+
+    static updateMenuItem = (data: {id: number, name: string, description: string, price:number}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log("token", localStorage.getItem('jwt'));
+            fetch(this.apiUri + `dishes/${data.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                //credentials: 'include',
+                body: JSON.stringify({...data})
+            }).then((response) => {
+                    if (response.status === 200) {
+                        resolve(null);
+                    } else if (response.status === 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
+    }
+
+    static deleteMenuItem = (data: {id: number}) => {
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            fetch(this.apiUri + `dishes/${data.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                //credentials: 'include',
+                body: JSON.stringify({...data})
+            }).then((response) => {
+                    if (response.status == 204) {
+                        resolve(null);
+                    } else if (response.status == 400){
+                        reject("Invalid dish");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
+    }
+
+    static reserveTable = (data: {name: string, day: string, hour: string, table_size: number, phone: string}) => {
         return new Promise((
             resolve: (result: null) => void,
             reject: (error: any) => void
         ) => {
-            setTimeout(() => {
-                if (data.name === 'fail') reject('Cererea ta nu s-a putut procesa. Incearca mai tarziu!');
-                else resolve(null);
-            }, 2000);
+            fetch(this.apiUri + 'reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    date: data.day + 'T' + data.hour,
+                    table_size: String(data.table_size),
+                    phone_number: data.phone
+                })
+            }).then((response) => {
+                
+                if (response.status >= 400) reject('Cererea ta nu s-a putut procesa. Incearca mai tarziu!');
+                else {
+                    response.json().then((data) => {
+                        resolve(null);
+                        Reservations.saveLocalReservation({id: data.data.id, at: new Date(), status: LocalReservationType.WAITING });
+                    });
+                    resolve(null);
+                }
+            });
         });
     }
 
+    static getReservationStatus = (id: number) => {
+        return new Promise((
+            resolve: (result: LocalReservationType) => void,
+            reject: (error: any) => void 
+        ) => {
+            fetch(this.apiUri + 'reservations/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then((response) => {
+                if (response.status >= 400) reject('Nu s-a putut obtine!');
+                else response.json().then(
+                    (data) => {
+                        if (data.data.attributes.confirmed) resolve(LocalReservationType.ACCEPTED);
+                        else resolve(LocalReservationType.WAITING);
+                    }
+                )
+            }).catch((error) => {
+                reject('Internal server error' + error.status);
+            });
+        });
+    }
+
+    static getReservations = () => {
+        return new Promise((
+            resolve: (result: Array<Reservation>) => void,
+            reject: (error: any) => void
+        ) => {
+                fetch(this.apiUri + 'reservations', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                    },
+                }).then((response) =>{
+                        response.json().then(
+                            (reservationsJson) => {
+                                resolve(
+                                    reservationsJson.data.map(this.getReservation)
+                                );
+                            }
+                        )
+                    }
+                ).catch((error) => {
+                    reject('Internal server error' + error.status);
+                });
+            });
+    }
+
+    static confirmReservation(data: {id: number, confirmed: string}){
+        return new Promise((
+            resolve: (success: null) => void,
+            reject: (error: any) => void
+        ) => {
+            console.log("token", localStorage.getItem('jwt'));
+            fetch(this.apiUri + `reservations/${data.id}/confirm`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                },
+                body: JSON.stringify(
+                    {confirmed: data.confirmed}
+                )
+            }).then((response) => {
+                    if (response.status === 200) {
+                        resolve(null);
+                    } else if (response.status === 400){
+                        reject("Invalid request");
+                    } else {
+                        reject("Server error");
+                    }
+                }
+            );
+        })
+    }
     static login = (data: {email: string, password: string}) => {
         return new Promise((
             resolve: (success: null) => void,
@@ -116,4 +340,6 @@ export default class Service{
             
         });
     }
+
+    
 }

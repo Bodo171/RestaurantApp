@@ -1,15 +1,17 @@
 import React from "react";
+import { LocalReservationType } from "../model/LocalReservation";
+import Reservations from "../service/Reservations";
 import Service from "../service/Service";
 import Row from 'react-bootstrap/Row';
+import {getDates, getStr} from "../util/dateUtil"
 
 type State = {
     fields: {
         day: string;
-        dayAndTime: Date;
         hour: string;
         name: string;
         phone: string;
-        persons: number;
+        table_size: number;
     }
     error: string;
     success: string;
@@ -22,11 +24,10 @@ export default class BookTable extends React.Component<{}, State>{
         this.state = {
             fields: {
                 day: '',
-                dayAndTime: new Date() || null,
                 hour: '',
                 name: '',
                 phone: '',
-                persons: 0
+                table_size: 0
             },
             error: '',
             success: '',
@@ -41,22 +42,22 @@ export default class BookTable extends React.Component<{}, State>{
         const value = event.target.value;
         let fields = this.state.fields;
 
-        //if("day" === inputName) fields.day = String(value);
-        //if("hour" === inputName) fields.hour = String(value);
-        if("dayAndTime" === inputName) fields.dayAndTime = value;
+        if("day" === inputName) fields.day = String(value);
+        if("hour" === inputName) fields.hour = String(value);
         if("name" === inputName) fields.name = String(value);
         if("phone" === inputName) fields.phone = String(value);
-        if("persons" === inputName) fields.persons = Number(value);
+        if("tableSize" === inputName) fields.table_size = Number(value);
         this.setState({fields: fields});
     }
 
     validateForm(){
         const fields = this.state.fields;
+      console.log(fields)
         if (fields.day === '') return "Te rog alege ziua!";
         if (fields.hour === '') return "Te rog alege ora!";
         if (fields.name === '') return "Te rog completează numele!";
         if (fields.phone === '') return "Te rog adaugă număr de telefon!";
-        if (fields.persons === 0) return "Te rog selectează numărul de persoane!";
+        if (fields.table_size === 0) return "Te rog selectează numărul de persoane!";
         return "";
 
     }
@@ -75,6 +76,7 @@ export default class BookTable extends React.Component<{}, State>{
                 .then((success) => {
                     this.setState({sending: false, success: 'Cererea ta a fost trimisa cu success!'});
                     event.target.form?.reset();
+
                 })
                 .catch((error) => {
                     this.setState({sending: false, error: String(error)});
@@ -84,7 +86,7 @@ export default class BookTable extends React.Component<{}, State>{
 
 
     render(){
-        let date = new Date();
+        const dates = getDates()
         return (
             <section id="book-table">
                 <div className="container">
@@ -110,12 +112,12 @@ export default class BookTable extends React.Component<{}, State>{
                                       <Row className='row form-horizontal '>
                                         <div className="col-sm-6">
                                             <fieldset>
-                                              <input required type='date' id='day' name='day' className='form-control' onChange={this.setValue}/>
+                                              <input type='date' required name='day' id='day' className='form-control' onChange={this.setValue}/>
                                             </fieldset>
                                         </div>
                                         <div className="col-sm-6 ">
                                             <fieldset>
-                                              <input required type='time' id='hour' name='hour' className='form-control' onChange={this.setValue}/>
+                                              <input type='time' required name='hour' id='hour' className='form-control' onChange={this.setValue}/>
                                             </fieldset>
                                         </div>
                                       </Row>

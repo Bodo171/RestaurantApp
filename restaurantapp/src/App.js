@@ -4,11 +4,34 @@ import Mainpage from './component/Mainpage';
 import Loginpage from './component/Loginpage';
 import React from 'react';
 import HeaderBar from './component/HeaderBar';
+import Footer from './component/Footer';
 import Contact from './component/Contact';
 import MenuPage from './component/MenuPage';
 import Adminpage from './component/Adminpage';
+import Editpage from "./component/Editpage";
+import { LocalReservationsStatus } from './model/LocalReservation';
+import Reservations from './service/Reservations';
+import ReservationPage from './component/ReservationPage';
+import AdminReservationPage from "./component/AdminReservationPage";
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())
+    };
+  }
+
+  componentDidMount(){
+    Reservations.listen("app", () => {
+      this.setState({reservationsStatus: LocalReservationsStatus(Reservations.getLocalReservations())});
+    });
+  }
+
+  componentWillUnmount(){
+    Reservations.unlisten("app");
+  }
+
   render(){
     const isLoggedIn = localStorage.getItem('jwt') !== null;
 
@@ -16,7 +39,9 @@ export default class App extends React.Component {
       <Router>
         <div className="header">
           <div className="container">
-            <a href="/" className="navbar-brand scroll-top">Restaurant App</a>
+              <nav className="navbar">
+                  <Link to="/" className="navbar-brand">Restaurant App</Link>
+              </nav>
             <nav className="navbar navbar-inverse" role="navigation">
               <div className="navbar-header">
                 <button type="button" id="nav-toggle" className="navbar-toggle" data-toggle="collapse" data-target="#main-nav">
@@ -37,6 +62,11 @@ export default class App extends React.Component {
                 </ul>
               </div>
             </nav>
+            {this.state.reservationsStatus.length > 0 && <>
+              <div><Link to="/myres">{this.state.reservationsStatus}</Link></div>
+              <br/>
+              </>
+            }
           </div>
         </div>
 
@@ -52,6 +82,19 @@ export default class App extends React.Component {
               <Redirect to="/login"/>
             }
           </Route>
+
+          <Route path="/reservations">
+            {isLoggedIn &&
+            <>
+              <HeaderBar title="Rezervări" body="Esti logat" />
+              <AdminReservationPage/>
+            </>
+            }
+            {!isLoggedIn &&
+            <Redirect to="/login"/>
+            }
+          </Route>
+
           <Route path="/login">
             {isLoggedIn &&
               <Redirect to="/admin"/>
@@ -66,9 +109,15 @@ export default class App extends React.Component {
           </Route>
 
           <Route path="/menu">
-            <HeaderBar title="Meniu" body="Even more vrajeala..." />
+            <HeaderBar title="Meniu"/>
             <MenuPage/>
           </Route>
+
+          <Route path="/edit/:id" render={(props)=>(<>
+            <HeaderBar title="Edit" body="Edit"/>
+            <Editpage id={props.match.params.id}/>
+          </>)}
+          />
 
           <Route path="/contact">
             <HeaderBar title="Contact" body="Vrei să ne trimiți un feedback sau să ne contactezi pentru relații de business? Folosește chestionarul de mai jos pentru a lua legătura cu noi!" />
@@ -76,7 +125,7 @@ export default class App extends React.Component {
           </Route>
 
           <Route path="/" exact={true}>
-          <HeaderBar title="Specialități cu gust" body="Te așteptăm la cel mai bun loc unde îți poți răsfăța papilele gustative cu mâncăruri pe alese... și alte vrăjeli..." />
+          {/* <HeaderBar title="Specialități cu gust" body="Te așteptăm la cel mai bun loc unde îți poți răsfăța papilele gustative cu mâncăruri pe alese... și alte vrăjeli..." /> */}
             <Mainpage/>
           </Route>
 
@@ -84,27 +133,7 @@ export default class App extends React.Component {
 
         </Switch>
 
-          <footer>
-            <div className="container">
-              <div className="row">
-                  <div className="col-md-4">
-                      <p>Copyright &copy; 2017 Victory Template</p>
-                  </div>
-                  <div className="col-md-4">
-                      <ul className="social-icons">
-                          <li><a href="/"><i className="fa fa-facebook"></i></a></li>
-                          <li><a href="/"><i className="fa fa-twitter"></i></a></li>
-                          <li><a href="/"><i className="fa fa-linkedin"></i></a></li>
-                          <li><a href="/"><i className="fa fa-rss"></i></a></li>
-                          <li><a href="/"><i className="fa fa-dribbble"></i></a></li>
-                      </ul>
-                  </div>
-                  <div className="col-md-4">
-                      <p>Designed by <em>templatemo</em></p>
-                  </div>
-              </div>
-          </div>
-        </footer>
+          <Footer/>
       </Router>
 
 

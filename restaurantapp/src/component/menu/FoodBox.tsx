@@ -4,7 +4,7 @@ import { FoodItem } from "../../model/FoodItem";
 export default function FoodBox(props:{item:FoodItem}){
     return (
         <div className="food-item">
-        <img src={props.item.image} alt="" />
+        <img src={props.item.image? props.item.image: "img/lunch_menu.jpg"} alt="" />
         <div className="price">RON {props.item.price}</div>
         <div className="text-content">
             <h4>{props.item.name}</h4>

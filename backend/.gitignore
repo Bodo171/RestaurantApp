@@ -15,7 +15,7 @@
 coverage/
 .idea/
 .DS_Store
-
+.history/
 .byebug_history
 
 # Ignore Configs
