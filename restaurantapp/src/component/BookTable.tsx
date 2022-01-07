@@ -1,7 +1,6 @@
 import React from "react";
 import Service from "../service/Service";
-import TextField from '@mui/material/TextField';
-
+import Row from 'react-bootstrap/Row';
 
 type State = {
     fields: {
@@ -67,6 +66,7 @@ export default class BookTable extends React.Component<{}, State>{
         event.stopPropagation();
 
         let error = this.validateForm();
+
         this.setState({error: error, success: ''});
 
         if (error === ''){
@@ -100,79 +100,60 @@ export default class BookTable extends React.Component<{}, State>{
                             </div>
                         </div>
                         <div className="col-md-4">
-                            <div className="right-info">
+                            <div className="right-info container-fluid">
                                 <h4>Rezervare</h4>
-                                <span style={{color: "red"}}>{this.state.error}</span>
-                                <span style={{color: "green"}}>{this.state.success}</span>
-
-                                <div className="row">
-                                    <form>
-                                        <div className="form-group">
-
-
-                                                    <TextField
-                                                        variant="standard"
-                                                        InputProps={{
-                                                            disableUnderline: true,
-                                                        }}
-                                                        id="dateAndTime"
-                                                        type="datetime-local"
-                                                        name="dateAndTime"
-                                                        className={"form-control"}
-                                                        defaultValue={
-                                                            date.getFullYear() + "-" +
-                                                            ("00" + (date.getMonth() + 1)).slice(-2) + "-" +
-                                                            ("00" + date.getDate()).slice(-2) + "T" +
-
-                                                            ("00" + date.getHours()).slice(-2) + ":" +
-                                                            ("00" + date.getMinutes()).slice(-2)
-                                                        }
-                                                        required
-                                                        onChange={this.setValue}
-                                                    />
-
+                                <span style={{ color: "red" }}>{this.state.error}</span>
+                                <span style={{ color: "green" }}>{this.state.success}</span>
+                                <Row className="row form-group ">
+                                    <form className='form-group-sm ' >
+                                      <div className='container-fluid'>
+                                      <Row className='row form-horizontal '>
+                                        <div className="col-sm-6">
+                                            <fieldset>
+                                              <input required type='date' id='day' name='day' className='form-control' onChange={this.setValue}/>
+                                            </fieldset>
+                                        </div>
+                                        <div className="col-sm-6 ">
+                                            <fieldset>
+                                              <input required type='time' id='hour' name='hour' className='form-control' onChange={this.setValue}/>
+                                            </fieldset>
+                                        </div>
+                                      </Row>
+                                      <Row className='form-horizontal '>
+                                        <div className="col-sm-6">
+                                            <fieldset>
+                                                <input name="name" type="name" className="form-control" id="name" placeholder="Numele tău" onChange={this.setValue} required />
+                                            </fieldset> 
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <fieldset>
+                                                <input name="phone" type="phone" className="form-control" id="phone" placeholder="Număr de telefon" onChange={this.setValue} required />
+                                            </fieldset>
+                                        </div>
+                                      </Row>
+                                      <Row className='row form-horizontal'>
+                                        <div className="col-sm-6">
+                                            <fieldset>
+                                                <select required className="person" name='tableSize' onChange={this.setValue}>
+                                                    <option value="">Câte persoane?</option>
+                                                    <option value="1">1 Persoană</option>
+                                                    <option value="2">2 Persoane</option>
+                                                    <option value="3">3 Persoane</option>
+                                                    <option value="4">4 Persoane</option>
+                                                    <option value="5">5 Persoane</option>
+                                                    <option value="6">6 Persoane</option>
+                                                </select>
+                                            </fieldset>
 
                                         </div>
-                                        <div className="form-group">
 
-
-                                                    <input name="name" type="name" className="form-control" id="name"
-                                                           placeholder="Numele tău" onChange={this.setValue} required/>
-
-
-
-
-                                                    <input name="phone" type="phone" className="form-control" id="phone"
-                                                           placeholder="Număr de telefon" onChange={this.setValue}
-                                                           required/>
-
-
+                                        <div className="col-sm-6">
+                                            <button disabled={this.state.sending} type="submit" id="form-submit" className="btn" onClick={this.onSubmit}>Rezervă masă</button>
                                         </div>
-                                        <div className="form-group">
-
-
-                                                    <select required className="person form-control" name='persons'
-                                                            onChange={this.setValue} >
-                                                        <option value="">Câte persoane?</option>
-                                                        <option value="1">1 Persoană</option>
-                                                        <option value="2">2 Persoane</option>
-                                                        <option value="3">3 Persoane</option>
-                                                        <option value="4">4 Persoane</option>
-                                                        <option value="5">5 Persoane</option>
-                                                        <option value="6">6 Persoane</option>
-                                                    </select>
-
-
-                                        </div>
-                                        <div className="form-group">
-
-                                                <button disabled={this.state.sending} type="submit" id="form-submit"
-                                                        className="btn form-control" onClick={this.onSubmit}>Rezervă masă
-                                                </button>
-
-                                        </div>
+                                      </Row>
+                                      </div>
                                     </form>
-                                </div>
+                                </Row>
                             </div>
                         </div>
                     </div>
