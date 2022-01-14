@@ -73,17 +73,6 @@ export default class BookTable extends React.Component<{}, State>{
                 .then((success) => {
                     this.setState({sending: false, success: 'Cererea ta a fost trimisa cu success!'});
                     event.target.form?.reset();
-                    // TODO: Map response data to local reservation
-                    try{
-                        Reservations.saveLocalReservation({
-                            id: 1,
-                            at: new Date(),
-                            status: LocalReservationType.WAITING
-                        });
-                    }
-                    catch(e){
-                        console.error(e);
-                    }
 
                 })
                 .catch((error) => {

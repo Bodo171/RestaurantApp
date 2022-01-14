@@ -2,6 +2,8 @@ import { Menu } from "../model/Menu";
 import { User } from "../model/User";
 import {FoodItem} from "../model/FoodItem";
 import {Reservation} from "../model/Reservation";
+import Reservations from "./Reservations";
+import { LocalReservation, LocalReservationType } from "../model/LocalReservation";
 
 export default class Service{
     static apiUri = 'https://restaurant-bckend.herokuapp.com/';
@@ -178,8 +180,39 @@ export default class Service{
                     phone_number: data.phone
                 })
             }).then((response) => {
+                
                 if (response.status >= 400) reject('Cererea ta nu s-a putut procesa. Incearca mai tarziu!');
-                else resolve(null);
+                else {
+                    response.json().then((data) => {
+                        resolve(null);
+                        Reservations.saveLocalReservation({id: data.data.id, at: new Date(), status: LocalReservationType.WAITING });
+                    });
+                    resolve(null);
+                }
+            });
+        });
+    }
+
+    static getReservationStatus = (id: number) => {
+        return new Promise((
+            resolve: (result: LocalReservationType) => void,
+            reject: (error: any) => void 
+        ) => {
+            fetch(this.apiUri + 'reservations/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then((response) => {
+                if (response.status >= 400) reject('Nu s-a putut obtine!');
+                else response.json().then(
+                    (data) => {
+                        if (data.data.attributes.confirmed) resolve(LocalReservationType.ACCEPTED);
+                        else resolve(LocalReservationType.WAITING);
+                    }
+                )
+            }).catch((error) => {
+                reject('Internal server error' + error.status);
             });
         });
     }

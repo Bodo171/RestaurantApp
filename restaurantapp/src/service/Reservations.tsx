@@ -54,6 +54,39 @@ export default class Reservations{
             localStorage.setItem('reservations', JSON.stringify(reservations));
             Reservations.trigger();
         }
-        
+    }
+
+    static removeLocalReservation = (id: number) => {
+        let reservations = [];
+        try{
+            reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+            if (!Array.isArray(reservations)) reservations = [];
+        }finally{
+            for (var i=0; i<reservations.length; i++){
+                let res = LocalReservationFromJSON(reservations[i]);
+                if (res.id === id){
+                    reservations.splice(i, 1);
+                    localStorage.setItem('reservations', JSON.stringify(reservations));
+            Reservations.trigger();
+                }
+            }
+        }
+    }
+
+    static updateLocalReservation = (reservation: LocalReservation) => {
+        let reservations = [];
+        try{
+            reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+            if (!Array.isArray(reservations)) reservations = [];
+        }finally{
+            for (var i=0; i<reservations.length; i++){
+                let res = LocalReservationFromJSON(reservations[i]);
+                if (res.id === reservation.id){
+                    reservations[i] = LocalReservationToJSON(reservation);
+                    localStorage.setItem('reservations', JSON.stringify(reservations));
+                    Reservations.trigger();
+                }
+            }
+        }
     }
 }

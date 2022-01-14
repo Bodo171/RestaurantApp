@@ -16,13 +16,21 @@ export default class ReservationPage extends React.Component<{}, State>{
         this.state = {
             reservations: []
         };
+
+        this.getAction = this.getAction.bind(this);
     }
 
     componentDidMount(){
         this.setState({reservations: Reservations.getLocalReservations()});
+        console.log(this.state.reservations);
+        
+
+
         Reservations.listen("reservationpage", () => {
             this.setState({reservations: Reservations.getLocalReservations()});
         });
+
+        
     }
 
     componentWillUnmount(){
@@ -51,25 +59,41 @@ export default class ReservationPage extends React.Component<{}, State>{
         }
     }
 
-    getAction(status: LocalReservationType){
-        switch(status){
-            case LocalReservationType.WAITING:
-                return <button className="btn btn-danger">Anuleaza</button>;
-            case LocalReservationType.ACCEPTED:
-                return <button className="btn btn-info">Sterge</button>;
-            case LocalReservationType.REFUSED:
-                return <button className="btn btn-info">Sterge</button>;
-        }
+    deleteReservation(id: number){
+        Reservations.removeLocalReservation(id);
+        this.setState({reservations: Reservations.getLocalReservations()});
+    }
+
+    getAction(reservation: LocalReservation){
+        return <button onClick={() => {this.deleteReservation(reservation.id)}} className="btn btn-info">Sterge</button>;
+        
     }
 
     
 
     render(){
+        for (var i=0; i<this.state.reservations.length; i++){
+            let id = this.state.reservations[i].id;
+            let index = i;
+            console.log('get ' +id);
+            Service.getReservationStatus(id)
+                .then((status: LocalReservationType) => {
+                    if (status !== this.state.reservations[index].status){
+                        let res = this.state.reservations[index];
+                        res.status = status;
+                        let allres = this.state.reservations;
+                        allres[index] = res;
+                        this.setState({reservations: allres});
+                        Reservations.updateLocalReservation(res);
+                    }
+                });
+        }
+
         const itemList = this.state.reservations.map( (reservation: LocalReservation) => (
             <tr key={reservation.at.getTime()}>
                 <th style={{fontStyle: "normal"}}>{this.getDif(reservation.at)}</th>
                 <th>{this.getStatus(reservation.status)}</th>
-                <th>{this.getAction(reservation.status)}</th>
+                <th>{this.getAction(reservation)}</th>
             </tr>
         ))
         return (
