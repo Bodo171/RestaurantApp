@@ -14,13 +14,14 @@
 !/tmp/.keep
 coverage/
 .idea/
-.DS_Store
+../.DS_Store
 .history/
 .byebug_history
 
 # Ignore Configs
 .envrc
 .rvmrc
+.erdconfig
 config/database.yml
 config/initializers/a_env.rb
 storage
