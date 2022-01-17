@@ -25,5 +25,5 @@ export default class HeaderBar extends React.Component<Props, State>{
             </section>
         );
     }
-    
+
 }

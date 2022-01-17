@@ -2,6 +2,7 @@ import React from "react";
 import { LocalReservationType } from "../model/LocalReservation";
 import Reservations from "../service/Reservations";
 import Service from "../service/Service";
+import Row from 'react-bootstrap/Row';
 import {getDates, getStr} from "../util/dateUtil"
 
 type State = {
@@ -51,6 +52,7 @@ export default class BookTable extends React.Component<{}, State>{
 
     validateForm(){
         const fields = this.state.fields;
+      console.log(fields)
         if (fields.day === '') return "Te rog alege ziua!";
         if (fields.hour === '') return "Te rog alege ora!";
         if (fields.name === '') return "Te rog completează numele!";
@@ -65,8 +67,9 @@ export default class BookTable extends React.Component<{}, State>{
         event.stopPropagation();
 
         let error = this.validateForm();
+
         this.setState({error: error, success: ''});
-        
+
         if (error === ''){
             this.setState({sending: true});
             Service.reserveTable(this.state.fields)
@@ -95,51 +98,43 @@ export default class BookTable extends React.Component<{}, State>{
                         </div>
                         <div className="col-md-4 col-md-offset-2">
                             <div className="left-image">
-                                <img src="img/book_left_image.jpg" alt="" />
+                                <img src="img/book_left_image.jpg" alt=""/>
                             </div>
                         </div>
                         <div className="col-md-4">
-                            <div className="right-info">
+                            <div className="right-info container-fluid">
                                 <h4>Rezervare</h4>
                                 <span style={{ color: "red" }}>{this.state.error}</span>
                                 <span style={{ color: "green" }}>{this.state.success}</span>
-                                <div className="row">
-                                    <form>
-                                        <div className="col-md-6">
+                                <Row className="row form-group ">
+                                    <form className='form-group-sm ' >
+                                      <div className='container-fluid'>
+                                      <Row className='row form-horizontal '>
+                                        <div className="col-sm-6">
                                             <fieldset>
-                                                <select required name='day' onChange={this.setValue}>
-                                                    <option value="">Alege ziua</option>
-                                                    {dates.map(
-                                                        date => <option value={getStr(date)}>{getStr(date)}</option>
-                                                    )}
-                                                </select>
+                                              <input type='date' required name='day' id='day' className='form-control' onChange={this.setValue}/>
                                             </fieldset>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-sm-6 ">
                                             <fieldset>
-                                                <select required name='hour' onChange={this.setValue} >
-                                                    <option value="">Alege ora</option>
-                                                    <option value="10:00">10:00</option>
-                                                    <option value="12:00">12:00</option>
-                                                    <option value="14:00">14:00</option>
-                                                    <option value="16:00">16:00</option>
-                                                    <option value="18:00">18:00</option>
-                                                    <option value="20:00">20:00</option>
-                                                    <option value="22:00">22:00</option>
-                                                </select>
+                                              <input type='time' required name='hour' id='hour' className='form-control' onChange={this.setValue}/>
                                             </fieldset>
                                         </div>
-                                        <div className="col-md-6">
+                                      </Row>
+                                      <Row className='form-horizontal '>
+                                        <div className="col-sm-6">
                                             <fieldset>
                                                 <input name="name" type="name" className="form-control" id="name" placeholder="Numele tău" onChange={this.setValue} required />
                                             </fieldset> 
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-sm-6">
                                             <fieldset>
                                                 <input name="phone" type="phone" className="form-control" id="phone" placeholder="Număr de telefon" onChange={this.setValue} required />
                                             </fieldset>
                                         </div>
-                                        <div className="col-md-6">
+                                      </Row>
+                                      <Row className='row form-horizontal'>
+                                        <div className="col-sm-6">
                                             <fieldset>
                                                 <select required className="person" name='tableSize' onChange={this.setValue}>
                                                     <option value="">Câte persoane?</option>
@@ -151,12 +146,16 @@ export default class BookTable extends React.Component<{}, State>{
                                                     <option value="6">6 Persoane</option>
                                                 </select>
                                             </fieldset>
+
                                         </div>
-                                        <div className="col-md-6">
+
+                                        <div className="col-sm-6">
                                             <button disabled={this.state.sending} type="submit" id="form-submit" className="btn" onClick={this.onSubmit}>Rezervă masă</button>
                                         </div>
+                                      </Row>
+                                      </div>
                                     </form>
-                                </div>
+                                </Row>
                             </div>
                         </div>
                     </div>
